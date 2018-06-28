@@ -12,7 +12,7 @@ from . import errors
 
 
 
-class MailCloud:
+class CloudMail:
     __slots__ = ["login", "password", "_csrf_token", "session", "api"]
     def __init__(self, login: str, password: str):
         self.login = login
@@ -38,7 +38,7 @@ class MailCloud:
                 response = self.session.post(constants.CSRF_TOKEN_ENDPOINT).json()
             
             if isinstance(response["body"], str):
-                raise errors.MailCloudUnexpectedTokenError(
+                raise errors.CloudMailUnexpectedTokenError(
                     "Received wrong response format while obtaining token: 'body' must be dict, not str")
 
             self._csrf_token = response["body"]["token"]
@@ -51,7 +51,7 @@ class MailCloud:
         )
 
         if ("fail=1" in response.url) and ("https://e.mail.ru/login" in response.url):
-            raise errors.MailCloudWrongAuthData("Wrong login/password data.")
+            raise errors.CloudMailWrongAuthData("Wrong login/password data.")
 
         if response.url == constants.DF_AUTH_ENDPOINT:
             response = self.session.post(constants.DF_AUTH_ENDPOINT,

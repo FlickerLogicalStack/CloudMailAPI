@@ -1,8 +1,8 @@
 
-# MailCloudAPI
+# CloudMailAPI
 Unofficial cloud.mail.ru's python API
 
-## All existing methods in Cloud Mail API
+## All existing methods in cloud.mail.ru's API
 
 | Implemented? | Method |          Path         |    Additional Info    |
 |:------------:|:------:|:---------------------:|:---------------------:|
@@ -74,28 +74,28 @@ I decided implement the structure of the original API so for the `file/add` requ
 All realized methods are described in the table above.
 #### Basic usage
 ```
->>> import mail_cloud_api
->>> mc = mail_cloud_api.MailCloud("email@email.com", "password")
->>> mc.auth() # This method can ask AuthCode by input() if df auth enabled, run in inputable env
+>>> import cloud_mail_api
+>>> cm = cloud_mail_api.CloudMail("email@email.com", "password")
+>>> cm.auth() # This method can ask AuthCode by input() if df auth enabled, run in inputable env
 True
->>> mc.print(mc.api.file.add("/Some/Local/Dir/file.txt", "/Some/Cloud/Dir/file_qwe.txt"))
+>>> cm.print(cm.api.file.add("/Some/Local/Dir/file.txt", "/Some/Cloud/Dir/file_qwe.txt"))
 {'email': 'email@email.com', 'body': '/Some/Cloud/Dir/file_qwe.txt', 'time': 1530208363765, 'status': 200}
 ```
 #### Cookies saving/loading
 For identification mail.ru use cookies.
 It would be a shame if every session you would have to authenticate again, so I implemented methods to load/save cookies to a json file.
 ```
->>> import mail_cloud_api
->>> mc_temp = mail_cloud_api.MailCloud("email@email.com", "password")
->>> mc_temp.auth()
+>>> import cloud_mail_api
+>>> cm_temp = cloud_mail_api.CloudMail("email@email.com", "password")
+>>> cm_temp.auth()
 True
->>> mc.save_cookies_to_file("/Some/Local/Dir/cookies.json")
+>>> cm.save_cookies_to_file("/Some/Local/Dir/cookies.json")
 <RequestsCookieJar[<Cookie GarageID=7d1958e70...>]
->>> del mc_temp
->>> mc = mail_cloud_api.MailCloud("email@email.com", "password")
->>> mc.load_cookies_from_file("/Some/Local/Dir/cookies.json")
+>>> del cm_temp
+>>> cm = cloud_mail_api.CloudMail("email@email.com", "password")
+>>> cm.load_cookies_from_file("/Some/Local/Dir/cookies.json")
 <RequestsCookieJar[<Cookie GarageID=7d1958e70...>]
->>> mc.print(mc.api.file.add("/Some/Local/Dir/file.txt", "/Some/Cloud/Dir/file_qwe.txt"))
+>>> cm.print(cm.api.file.add("/Some/Local/Dir/file.txt", "/Some/Cloud/Dir/file_qwe.txt"))
 {'email': 'email@email.com', 'body': '/Some/Cloud/Dir/file_qwe.txt', 'time': 1530208363765, 'status': 200}
 ```
 

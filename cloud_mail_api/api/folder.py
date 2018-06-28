@@ -4,9 +4,9 @@ import os.path
 from .. import constants
 
 class FolderMethodsGroup:
-    __slots__ = ["mail_cloud_instance", "api"]
-    def __init__(self, mail_cloud_instance, api_instance):
-        self.mail_cloud_instance = mail_cloud_instance
+    __slots__ = ["cloud_mail_instance", "api"]
+    def __init__(self, cloud_mail_instance, api_instance):
+        self.cloud_mail_instance = cloud_mail_instance
         self.api = api_instance
 
     def add(self, cloud_path: str) -> dict:
@@ -15,7 +15,7 @@ class FolderMethodsGroup:
         data = {
             "home": cloud_path,
             "conflict": "rename",
-            "token": self.mail_cloud_instance.csrf_token
+            "token": self.cloud_mail_instance.csrf_token
         }
 
         return self.api(url, "post", data=data)
@@ -25,10 +25,10 @@ class FolderMethodsGroup:
 
         data = {
             "home": cloud_path,
-            "token": self.mail_cloud_instance.csrf_token,
+            "token": self.cloud_mail_instance.csrf_token,
             "api": 2,
-            "email": self.mail_cloud_instance.login,
-            "x-email": self.mail_cloud_instance.login,
+            "email": self.cloud_mail_instance.login,
+            "x-email": self.cloud_mail_instance.login,
         }
 
         return self.api(url, "post", data=data)
@@ -39,10 +39,10 @@ class FolderMethodsGroup:
         data = {
             "home": folder_path,
             "folder": to_folder_path,
-            "token": self.mail_cloud_instance.csrf_token,
+            "token": self.cloud_mail_instance.csrf_token,
             "api": 2,
-            "email": self.mail_cloud_instance.login,
-            "x-email": self.mail_cloud_instance.login,
+            "email": self.cloud_mail_instance.login,
+            "x-email": self.cloud_mail_instance.login,
         }
 
         return self.api(url, "post", data=data)
@@ -53,11 +53,25 @@ class FolderMethodsGroup:
         data = {
             "home": cloud_path,
             "name": new_name,
-            "token": self.mail_cloud_instance.csrf_token,
+            "token": self.cloud_mail_instance.csrf_token,
             "conflict": "rename",
             "api": 2,
-            "email": self.mail_cloud_instance.login,
-            "x-email": self.mail_cloud_instance.login,
+            "email": self.cloud_mail_instance.login,
+            "x-email": self.cloud_mail_instance.login,
+        }
+
+        return self.api(url, "post", data=data)
+
+    def publish(self, cloud_path: str):
+        url = constants.API_FOLDER_PUBLISH_PATH
+
+        data = {
+            "home": folder_path,
+            "folder": to_folder_path,
+            "token": self.cloud_mail_instance.csrf_token,
+            "api": 2,
+            "email": self.cloud_mail_instance.login,
+            "x-email": self.cloud_mail_instance.login,
         }
 
         return self.api(url, "post", data=data)
