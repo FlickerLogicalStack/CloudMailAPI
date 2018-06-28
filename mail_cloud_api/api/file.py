@@ -6,6 +6,7 @@ from typing import Tuple
 from .. import constants
 
 class FileMethodsGroup:
+    __slots__ = ["mail_cloud_instance", "api"]
     def __init__(self, mail_cloud_instance, api_instance):
         self.mail_cloud_instance = mail_cloud_instance
         self.api = api_instance

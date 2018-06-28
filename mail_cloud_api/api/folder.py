@@ -4,6 +4,7 @@ import os.path
 from .. import constants
 
 class FolderMethodsGroup:
+    __slots__ = ["mail_cloud_instance", "api"]
     def __init__(self, mail_cloud_instance, api_instance):
         self.mail_cloud_instance = mail_cloud_instance
         self.api = api_instance

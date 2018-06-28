@@ -8,6 +8,7 @@ from .folder import FolderMethodsGroup
 
 
 class API:
+    __slots__ = ["mail_cloud_instance", "file", "folder"]
     def __init__(self, mail_cloud_instance):
         self.mail_cloud_instance = mail_cloud_instance
 
