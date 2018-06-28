@@ -29,7 +29,8 @@ class API:
         else:
             url = "/".join([constants.API_BASE_ENDPOINT, path.strip(r"\/")])
 
+        print(url)
         response = getattr(self.session, http_method.lower())(
-            url, data=kwargs, headers={"X-Requested-With": "XMLHttpRequest"})
+            url, headers={"X-Requested-With": "XMLHttpRequest"}, **kwargs)
 
         return response.json()
