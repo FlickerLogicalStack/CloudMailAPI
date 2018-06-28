@@ -102,3 +102,7 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+cookies.json
+tests.py
+*.sublime-workspace
+*.sublime-project
