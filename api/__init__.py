@@ -1,6 +1,7 @@
 __all__ = ["API"]
 
 from .file import FileMethodsGroup
+from .folder import FolderMethodsGroup
 from .. import constants
 
 class API:
@@ -8,6 +9,7 @@ class API:
         self.mail_cloud_instance = mail_cloud_instance
 
         self.file = FileMethodsGroup(mail_cloud_instance, self)
+        self.folder = FolderMethodsGroup(mail_cloud_instance, self)
 
     @property
     def session(self):
