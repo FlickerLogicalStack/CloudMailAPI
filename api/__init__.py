@@ -1,11 +1,9 @@
 __all__ = ["API"]
 
 from .file import FileMethodsGroup
+from .. import constants
 
 class API:
-    BASE_ENDPOINT = "https://cloud.mail.ru/api/v2"
-    FILE_UPLOAD_ENDPOINT = "https://cloclo21-upload.cloud.mail.ru/upload/"
-
     def __init__(self, mail_cloud_instance):
         self.mail_cloud_instance = mail_cloud_instance
 

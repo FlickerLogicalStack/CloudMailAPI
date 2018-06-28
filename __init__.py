@@ -1,17 +1,14 @@
 import json
 import os.path
 import re
+import sys
 
 import requests
 
-from api import API
+from . import api
+from . import constants
 
 class MailCloud:
-    CSRF_TOKEN_ENDPOINT = "https://cloud.mail.ru/api/v2/tokens/csrf"
-    MAILRU_AUTH_ENDPOINT = "https://auth.mail.ru/cgi-bin/auth"
-    SDC_ENDPOINT = "https://auth.mail.ru/sdc?from=https://cloud.mail.ru/home"
-    DF_AUTH_ENDPOINT = "https://auth.mail.ru/cgi-bin/secstep"
-
     def __init__(self, login, password):
         self.login = login
         self.password = password
@@ -19,31 +16,30 @@ class MailCloud:
         self._csrf_token = None
 
         self.session = requests.Session()
-        self.api = API(self)
+        self.api = api.API(self)
 
     @property
     def csrf_token(self):
         if self._csrf_token is None:
-            response = self.session.post(MailCloud.CSRF_TOKEN_ENDPOINT).json()
+            response = self.session.post(constants.CSRF_TOKEN_ENDPOINT).json()
 
             if response.get("body") == "user":
                 self.auth()
-                self.session.get(MailCloud.SDC_ENDPOINT)
-                response = self.session.post(MailCloud.CSRF_TOKEN_ENDPOINT).json()
+                response = self.session.post(constants.CSRF_TOKEN_ENDPOINT).json()
 
             elif response.get("body") == "nosdc":
-                self.session.get(MailCloud.SDC_ENDPOINT)
-                response = self.session.post(MailCloud.CSRF_TOKEN_ENDPOINT).json()
+                self.session.get(constants.SDC_ENDPOINT)
+                response = self.session.post(constants.CSRF_TOKEN_ENDPOINT).json()
             
             self._csrf_token = response["body"]["token"]
         return self._csrf_token
 
     def auth(self):
-        response = self.session.post(MailCloud.MAILRU_AUTH_ENDPOINT,
+        response = self.session.post(constants.MAILRU_AUTH_ENDPOINT,
             params={"Login": self.login, "Password": self.password}
         )
-        if response.url == MailCloud.DF_AUTH_ENDPOINT:
-            response = self.session.post(MailCloud.DF_AUTH_ENDPOINT,
+        if response.url == constants.DF_AUTH_ENDPOINT:
+            response = self.session.post(constants.DF_AUTH_ENDPOINT,
                 data={
                     "csrf": re.findall(r'"csrf":"(.+)","device"', response.text)[0],
                     "Login": self.login,
@@ -52,15 +48,15 @@ class MailCloud:
                 }
             )
 
-        self.session.get(MailCloud.SDC_ENDPOINT)
+        self.session.get(constants.SDC_ENDPOINT)
 
-    def save_cookies_to_file(self, file_path):
+    def save_cookies_to_file(self, file_path="cookies.json"):
         with open(file_path, "w") as file:
             json.dump(
                 requests.utils.dict_from_cookiejar(self.session.cookies), file, indent=4
             )
 
-    def load_cookies_from_file(self, file_path):
+    def load_cookies_from_file(self, file_path="cookies.json"):
         with open(file_path, "r") as file:
             self.session.cookies = requests.utils.cookiejar_from_dict(json.load(file))
     
