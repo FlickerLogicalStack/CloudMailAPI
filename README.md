@@ -2,7 +2,7 @@
 # MailCloudAPI
 Unofficial cloud.mail.ru's python API
 
-### All existing methods in Cloud Mail API
+## All existing methods in Cloud Mail API
 
 | Implemented? | Method |          Path         |    Additional Info    |
 |:------------:|:------:|:---------------------:|:---------------------:|
@@ -69,4 +69,34 @@ Unofficial cloud.mail.ru's python API
 |              | (POST) | promo/validate        |                       |
 |              | (POST) | notify/applink        |                       |
 
-##### *marked those that are implemented*
+## Examples of usage
+I decided implement the structure of the original API so for the `file/add` request you must call the method `MailCloud_instance.api.file.add(...)`.
+All realized methods are written in the table above.
+#### Basic usage
+```
+>>> import mail_cloud_api
+>>> mc = mail_cloud_api.MailCloud("email@email.com", "password")
+>>> mc.auth() # This method can ask AuthCode by input() if df auth enabled, run in inputable env
+True
+>>> mc.print(mc.api.file.add("/Some/Local/Dir/file.txt", "/Some/Cloud/Dir/file_qwe.txt"))
+{'email': 'email@email.com', 'body': '/Some/Cloud/Dir/file_qwe.txt', 'time': 1530208363765, 'status': 200}
+```
+#### Cookies saving/loading
+For identification mail.ru use cookies.
+Would be a shame if every session you would have to authenticate again, so I implemented methods to load/save cookies to a json file.
+```
+>>> import mail_cloud_api
+>>> mc_temp = mail_cloud_api.MailCloud("email@email.com", "password")
+>>> mc_temp.auth()
+True
+>>> del mc_temp
+>>> mc.save_cookies_to_file("/Some/Local/Dir/cookies.json")
+<RequestsCookieJar[<Cookie GarageID=7d1958e70...>]
+>>> mc = mail_cloud_api.MailCloud("email@email.com", "password")
+>>> mc.load_cookies_from_file("/Some/Local/Dir/cookies.json")
+<RequestsCookieJar[<Cookie GarageID=7d1958e70...>]
+>>> mc.print(mc.api.file.add("/Some/Local/Dir/file.txt", "/Some/Cloud/Dir/file_qwe.txt"))
+{'email': 'email@email.com', 'body': '/Some/Cloud/Dir/file_qwe.txt', 'time': 1530208363765, 'status': 200}
+```
+
+Also exist method `def update_cookies_from_dict(self, dict_={}, **kwargs) -> RequestsCookieJar` with th same effect as `load_cookies_from_file`
