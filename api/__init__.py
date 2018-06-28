@@ -1,8 +1,11 @@
 __all__ = ["API"]
 
+from requests.cookies import RequestsCookieJar
+
+from .. import constants
 from .file import FileMethodsGroup
 from .folder import FolderMethodsGroup
-from .. import constants
+
 
 class API:
     def __init__(self, mail_cloud_instance):
@@ -12,16 +15,20 @@ class API:
         self.folder = FolderMethodsGroup(mail_cloud_instance, self)
 
     @property
-    def session(self):
+    def session(self) -> RequestsCookieJar:
         return self.mail_cloud_instance.session
 
     @property
-    def csrf_token(self):
+    def csrf_token(self) -> str:
         return self.mail_cloud_instance.csrf_token
 
-    def __call__(self, path, http_method, **kwargs):
+    def __call__(self, path: str, http_method: str, fullpath=False, **kwargs) -> dict:
+        if fullpath:
+            url = path
+        else:
+            url = "/".join([constants.API_BASE_ENDPOINT, path.strip(r"\/")])
+
         response = getattr(self.session, http_method.lower())(
-            "/".join([API.BASE_ENDPOINT, path.strip(r"\/")]),
-            data=kwargs, headers={"X-Requested-With": "XMLHttpRequest"})
+            url, data=kwargs, headers={"X-Requested-With": "XMLHttpRequest"})
 
         return response.json()

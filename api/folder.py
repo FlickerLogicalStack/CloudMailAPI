@@ -6,10 +6,10 @@ from .. import constants
 class FolderMethodsGroup:
     def __init__(self, mail_cloud_instance, api_instance):
         self.mail_cloud_instance = mail_cloud_instance
-        self.api_instance = api_instance
+        self.api = api_instance
 
-    def add(self, cloud_path):
-        url = constants.API_FOLDER_ADD
+    def add(self, cloud_path: str) -> dict:
+        url = constants.API_FOLDER_ADD_PATH
 
         data = {
             "home": cloud_path,
@@ -17,6 +17,4 @@ class FolderMethodsGroup:
             "token": self.mail_cloud_instance.csrf_token
         }
 
-        response = self.mail_cloud_instance.session.post(url, data=data, headers={"X-Requested-With": "XMLHttpRequest"})
-
-        return response.json()
+        return self.api(url, "post", **data)

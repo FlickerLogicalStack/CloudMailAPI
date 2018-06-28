@@ -4,6 +4,7 @@ import re
 import sys
 
 import requests
+from requests.cookies import RequestsCookieJar
 
 from . import api
 from . import constants
@@ -12,7 +13,8 @@ from . import errors
 
 
 class MailCloud:
-    def __init__(self, login, password):
+    __slots__ = ["login", "password", "_csrf_token", "session", "api"]
+    def __init__(self, login: str, password: str):
         self.login = login
         self.password = password
 
@@ -23,7 +25,7 @@ class MailCloud:
 
 
     @property
-    def csrf_token(self):
+    def csrf_token(self) -> str:
         if self._csrf_token is None:
             response = self.session.post(constants.CSRF_TOKEN_ENDPOINT).json()
 
@@ -43,7 +45,7 @@ class MailCloud:
         return self._csrf_token
 
 
-    def auth(self):
+    def auth(self) -> bool:
         response = self.session.post(constants.MAILRU_AUTH_ENDPOINT,
             params={"Login": self.login, "Password": self.password}
         )
@@ -62,21 +64,27 @@ class MailCloud:
             )
 
         self.session.get(constants.SDC_ENDPOINT)
+        return True
 
 
-    def save_cookies_to_file(self, file_path="cookies.json"):
+    def save_cookies_to_file(self, file_path="cookies.json") -> RequestsCookieJar:
         with open(file_path, "w") as file:
             json.dump(
                 requests.utils.dict_from_cookiejar(self.session.cookies), file, indent=4
             )
+        return self.session.cookies
 
 
-    def load_cookies_from_file(self, file_path="cookies.json"):
+    def load_cookies_from_file(self, file_path="cookies.json") -> RequestsCookieJar:
         with open(file_path, "r") as file:
             self.session.cookies = requests.utils.cookiejar_from_dict(json.load(file))
 
+        return self.session.cookies
 
-    def update_cookies_from_dict(self, dict_={}, **kwargs):
+
+    def update_cookies_from_dict(self, dict_={}, **kwargs) -> RequestsCookieJar:
         dict_.update(kwargs)
         for k, v in dict_.items():
             self.session.cookies[k] = v
+
+        return self.session.cookies
