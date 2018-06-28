@@ -7,6 +7,9 @@ import requests
 
 from . import api
 from . import constants
+from . import errors
+
+
 
 class MailCloud:
     def __init__(self, login, password):
@@ -17,6 +20,7 @@ class MailCloud:
 
         self.session = requests.Session()
         self.api = api.API(self)
+
 
     @property
     def csrf_token(self):
@@ -31,13 +35,22 @@ class MailCloud:
                 self.session.get(constants.SDC_ENDPOINT)
                 response = self.session.post(constants.CSRF_TOKEN_ENDPOINT).json()
             
+            if isinstance(response["body"], str):
+                raise errors.MailCloudUnexpectedTokenError(
+                    "Received wrong response format while obtaining token: 'body' must be dict, not str")
+
             self._csrf_token = response["body"]["token"]
         return self._csrf_token
+
 
     def auth(self):
         response = self.session.post(constants.MAILRU_AUTH_ENDPOINT,
             params={"Login": self.login, "Password": self.password}
         )
+
+        if ("fail=1" in response.url) and ("https://e.mail.ru/login" in response.url):
+            raise errors.MailCloudWrongAuthData("Wrong login/password data.")
+
         if response.url == constants.DF_AUTH_ENDPOINT:
             response = self.session.post(constants.DF_AUTH_ENDPOINT,
                 data={
@@ -50,16 +63,19 @@ class MailCloud:
 
         self.session.get(constants.SDC_ENDPOINT)
 
+
     def save_cookies_to_file(self, file_path="cookies.json"):
         with open(file_path, "w") as file:
             json.dump(
                 requests.utils.dict_from_cookiejar(self.session.cookies), file, indent=4
             )
 
+
     def load_cookies_from_file(self, file_path="cookies.json"):
         with open(file_path, "r") as file:
             self.session.cookies = requests.utils.cookiejar_from_dict(json.load(file))
-    
+
+
     def update_cookies_from_dict(self, dict_={}, **kwargs):
         dict_.update(kwargs)
         for k, v in dict_.items():
