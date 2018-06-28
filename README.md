@@ -89,9 +89,9 @@ It would be a shame if every session you would have to authenticate again, so I 
 >>> mc_temp = mail_cloud_api.MailCloud("email@email.com", "password")
 >>> mc_temp.auth()
 True
->>> del mc_temp
 >>> mc.save_cookies_to_file("/Some/Local/Dir/cookies.json")
 <RequestsCookieJar[<Cookie GarageID=7d1958e70...>]
+>>> del mc_temp
 >>> mc = mail_cloud_api.MailCloud("email@email.com", "password")
 >>> mc.load_cookies_from_file("/Some/Local/Dir/cookies.json")
 <RequestsCookieJar[<Cookie GarageID=7d1958e70...>]
