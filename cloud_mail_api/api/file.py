@@ -6,9 +6,9 @@ from typing import Tuple
 from .. import constants
 
 class FileMethodsGroup:
-    __slots__ = ["mail_cloud_instance", "api"]
-    def __init__(self, mail_cloud_instance, api_instance):
-        self.mail_cloud_instance = mail_cloud_instance
+    __slots__ = ["cloud_mail_instance", "api"]
+    def __init__(self, cloud_mail_instance, api_instance):
+        self.cloud_mail_instance = cloud_mail_instance
         self.api = api_instance
 
     def _upload_file(self, file_path: str) -> Tuple[str, int]:
@@ -20,7 +20,7 @@ class FileMethodsGroup:
             )
         }
 
-        response = self.mail_cloud_instance.session.put(constants.API_FILE_UPLOAD_ENDPOINT, files=files)
+        response = self.cloud_mail_instance.session.put(constants.API_FILE_UPLOAD_ENDPOINT, files=files)
 
         return response.text, int(response.request.headers["Content-Length"])
 
@@ -31,7 +31,7 @@ class FileMethodsGroup:
             "home": cloud_path,
             "hash": cloud_hash,
             "size": file_size,
-            "token": self.mail_cloud_instance.csrf_token,
+            "token": self.cloud_mail_instance.csrf_token,
             "conflict": "rename",
             "api": 2,
         }
@@ -50,10 +50,10 @@ class FileMethodsGroup:
 
         data = {
             "home": cloud_path,
-            "token": self.mail_cloud_instance.csrf_token,
+            "token": self.cloud_mail_instance.csrf_token,
             "api": 2,
-            "email": self.mail_cloud_instance.login,
-            "x-email": self.mail_cloud_instance.login,
+            "email": self.cloud_mail_instance.login,
+            "x-email": self.cloud_mail_instance.login,
         }
 
         return self.api(url, "post", data=data)
@@ -64,10 +64,10 @@ class FileMethodsGroup:
         data = {
             "home": from_file_path,
             "folder": to_folder_path,
-            "token": self.mail_cloud_instance.csrf_token,
+            "token": self.cloud_mail_instance.csrf_token,
             "api": 2,
-            "email": self.mail_cloud_instance.login,
-            "x-email": self.mail_cloud_instance.login,
+            "email": self.cloud_mail_instance.login,
+            "x-email": self.cloud_mail_instance.login,
         }
 
         return self.api(url, "post", data=data)
@@ -78,11 +78,11 @@ class FileMethodsGroup:
         data = {
             "home": cloud_path,
             "name": new_name,
-            "token": self.mail_cloud_instance.csrf_token,
+            "token": self.cloud_mail_instance.csrf_token,
             "conflict": "rename",
             "api": 2,
-            "email": self.mail_cloud_instance.login,
-            "x-email": self.mail_cloud_instance.login,
+            "email": self.cloud_mail_instance.login,
+            "x-email": self.cloud_mail_instance.login,
         }
 
         return self.api(url, "post", data=data)

@@ -8,20 +8,20 @@ from .folder import FolderMethodsGroup
 
 
 class API:
-    __slots__ = ["mail_cloud_instance", "file", "folder"]
-    def __init__(self, mail_cloud_instance):
-        self.mail_cloud_instance = mail_cloud_instance
+    __slots__ = ["cloud_mail_instance", "file", "folder"]
+    def __init__(self, cloud_mail_instance):
+        self.cloud_mail_instance = cloud_mail_instance
 
-        self.file = FileMethodsGroup(mail_cloud_instance, self)
-        self.folder = FolderMethodsGroup(mail_cloud_instance, self)
+        self.file = FileMethodsGroup(cloud_mail_instance, self)
+        self.folder = FolderMethodsGroup(cloud_mail_instance, self)
 
     @property
     def session(self) -> RequestsCookieJar:
-        return self.mail_cloud_instance.session
+        return self.cloud_mail_instance.session
 
     @property
     def csrf_token(self) -> str:
-        return self.mail_cloud_instance.csrf_token
+        return self.cloud_mail_instance.csrf_token
 
     def __call__(self, path: str, http_method: str, fullpath=False, **kwargs) -> dict:
         if fullpath:
