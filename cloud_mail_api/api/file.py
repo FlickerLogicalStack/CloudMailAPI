@@ -13,11 +13,11 @@ def file(api, cloud_path: str) -> dict:
 
     return api(url, "get", params=data)
 
-def file_upload_file(api, file_path: str) -> Tuple[str, int]:
+def file_upload_file(api, local_path: str) -> Tuple[str, int]:
     files = {
         "file": (
-            os.path.basename(file_path),
-            open(file_path, "rb"),
+            os.path.basename(local_path),
+            open(local_path, "rb"),
             "application/octet-stream"
         )
     }

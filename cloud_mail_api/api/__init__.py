@@ -45,6 +45,7 @@ class MethodsStore:
 
             "file": file.file,
             "file/add": file.file_add,
+            "file/_uload_file": file.file_upload_file,
             "file/move": file.file_move,
             "file/remove": file.file_remove,
             "file/rename": file.file_rename,
