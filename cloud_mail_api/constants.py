@@ -5,8 +5,12 @@ DF_AUTH_ENDPOINT = "https://auth.mail.ru/cgi-bin/secstep"
 
 API_BASE_ENDPOINT = "https://cloud.mail.ru/api/v2"
 
-API_FILE_UPLOAD_ENDPOINT = "https://cloclo21-upload.cloud.mail.ru/upload/"
+API_ZIP_PATH = "zip"
+API_DISPATCHER_PATH = "dispatcher"
+API_APPLINK_PATH = "notify/applink"
 
+
+API_FILE_UPLOAD_ENDPOINT = "https://cloclo21-upload.cloud.mail.ru/upload/"
 API_FILE_PATH = "file"
 API_FILE_ADD_PATH = "file/add"
 API_FILE_REMOVE_PATH = "file/remove"
@@ -33,8 +37,6 @@ API_TRASHBIN_EMPTY_PATH = "trashbin/empty"
 API_TOKENS_CSRF_PATH = "tokens/csrf"
 API_TOKENS_DOWNLOAD_PATH = "tokens/download"
 
-API_ZIP_PATH = "zip"
-API_DISPATCHER_PATH = "dispatcher"
 
 API_USER_PATH = "user"
 API_USER_SPACE_PATH = "user/space"
