@@ -31,7 +31,7 @@ class API:
         if name not in vars(self):
             if name in dir(self.single_methods_group):
                 return getattr(self.single_methods_group, name)
-        return super().__getattr__(name)
+        return super().__getattribute__(name)
 
     @property
     def session(self) -> RequestsCookieJar:

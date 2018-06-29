@@ -122,3 +122,13 @@ class FileMethodsGroup:
         }
 
         return self.api(url, "post", data=data)
+
+    def history(self, cloud_path: str) -> dict:
+        url = constants.API_FILE_HISTORY_PATH
+
+        data = {
+            "home": cloud_path,
+            "token": self.cloud_mail_instance.csrf_token,
+        }
+
+        return self.api(url, "get", params=data)

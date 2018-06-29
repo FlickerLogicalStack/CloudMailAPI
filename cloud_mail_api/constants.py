@@ -15,6 +15,7 @@ API_FILE_MOVE_PATH = "file/move"
 API_FILE_PUBLISH_PATH = "file/publish"
 API_FILE_UNPUBLISH_PATH = "file/unpublish"
 API_FILE_COPY_PATH = "file/copy"
+API_FILE_HISTORY_PATH = "file/history"
 
 API_FOLDER_PATH = "folder"
 API_FOLDER_ADD_PATH = "folder/add"
