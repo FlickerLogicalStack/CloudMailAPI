@@ -44,8 +44,8 @@ Unofficial cloud.mail.ru's python API
 |              | (GET)  | mail/ab/contacts      |                          |
 |              | (POST) | mail/ab/contacts/add  |                          |
 |              | (GET)  | status                |                          |
-|       X      | (POST) | tokens/csrf           |Now `csrf_token` property |
-|              | (POST) | tokens/download       |                          |
+|       X      | (POST) | tokens/csrf           |                          |
+|       X      | (POST) | tokens/download       |                          |
 |              | (GET)  | weblinks              |                          |
 |              | (GET)  | weblinks/subscribe    |                          |
 |              | (GET)  | user                  |                          |
@@ -65,9 +65,9 @@ Unofficial cloud.mail.ru's python API
 |              | (POST) | billing/prolong       |                          |
 |              | (POST) | billing/cancel        |                          |
 |              | (POST) | billing/history       |                          |
-|              | (GET)  | trashbin              |                          |
-|              | (POST) | trashbin/restore      |                          |
-|              | (POST) | trashbin/empty        |                          |
+|       X      | (GET)  | trashbin              |                          |
+|       X      | (POST) | trashbin/restore      |                          |
+|       X      | (POST) | trashbin/empty        |                          |
 |              | (GET)  | domain/folders        |                          |
 |              | (POST) | promo/validate        |                          |
 |              | (POST) | notify/applink        |                          |

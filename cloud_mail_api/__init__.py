@@ -24,6 +24,7 @@ class CloudMail:
         self.api = api.API(self)
 
 
+    # TODO: Rewrite with self.api.tokens.csrf()
     @property
     def csrf_token(self) -> str:
         if self._csrf_token is None:

@@ -6,10 +6,12 @@ from typing import Tuple
 from .. import constants
 
 class FileMethodsGroup:
-    __slots__ = ["cloud_mail_instance", "api"]
+    __slots__ = ["cloud_mail_instance", "api","_upload_file_url"]
     def __init__(self, cloud_mail_instance, api_instance):
         self.cloud_mail_instance = cloud_mail_instance
         self.api = api_instance
+
+        self._upload_file_url = None
 
     def _upload_file(self, file_path: str) -> Tuple[str, int]:
         files = {
