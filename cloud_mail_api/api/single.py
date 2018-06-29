@@ -13,12 +13,21 @@ class SingleMethodsGroup:
         self.api = api_instance
 
     def zip(self, cloud_paths: Iterable[str], name: str) -> dict:
-    	url = constants.API_ZIP_PATH
+        url = constants.API_ZIP_PATH
 
-    	data = {
-    		"home_list": str(cloud_paths).replace("'", '"'),
-    		"name": name,
-    		"token": self.cloud_mail_instance.csrf_token
-    	}
+        data = {
+            "home_list": str(cloud_paths).replace("'", '"'),
+            "name": name,
+            "token": self.cloud_mail_instance.csrf_token
+        }
 
-    	return self.api(url, "post", data=data)
+        return self.api(url, "post", data=data)
+
+    def dispatcher(self):
+        url = constants.API_DISPATCHER_PATH
+
+        data = {
+            "token": self.cloud_mail_instance.csrf_token
+        }
+
+        return self.api(url, "get", params=data)

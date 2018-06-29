@@ -9,7 +9,7 @@ Unofficial cloud.mail.ru's python API
 |              | (POST) | batch                 |                          |
 |              | (POST) | clone                 |                          |
 |              | (POST) | stock/save            |                          |
-|              | (GET)  | dispatcher            |                          |
+|       X      | (GET)  | dispatcher            |                          |
 |              | (POST) | docs/token            |                          |
 |       X      | (GET)  | file                  |                          |
 |       X      | (POST) | file/add              |                          |

@@ -33,5 +33,7 @@ API_TOKENS_CSRF_PATH = "tokens/csrf"
 API_TOKENS_DOWNLOAD_PATH = "tokens/download"
 
 API_ZIP_PATH = "zip"
+API_DISPATCHER_PATH = "dispatcher"
 
 API_USER_SPACE_PATH = "user/space"
+
