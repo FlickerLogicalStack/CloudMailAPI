@@ -6,3 +6,9 @@ class CloudMailWrongAuthData(CloudMailBaseException):
 
 class CloudMailUnexpectedTokenError(CloudMailBaseException):
 	pass
+
+class CloudMailRequireLoginError(CloudMailBaseException):
+	pass
+
+class CloudMailSdcGettingError(CloudMailBaseException):
+	pass

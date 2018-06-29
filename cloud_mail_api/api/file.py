@@ -6,10 +6,22 @@ from typing import Tuple
 from .. import constants
 
 class FileMethodsGroup:
-    __slots__ = ["cloud_mail_instance", "api"]
+    __slots__ = ["cloud_mail_instance", "api","_upload_file_url"]
     def __init__(self, cloud_mail_instance, api_instance):
         self.cloud_mail_instance = cloud_mail_instance
         self.api = api_instance
+
+        self._upload_file_url = None
+
+    def __call__(self, cloud_path: str) -> dict:
+        url = constants.API_FILE_PATH
+
+        data = {
+            "home": cloud_path,
+            "token": self.cloud_mail_instance.csrf_token,
+        }
+
+        return self.api(url, "get", params=data)
 
     def _upload_file(self, file_path: str) -> Tuple[str, int]:
         files = {
@@ -21,7 +33,8 @@ class FileMethodsGroup:
         }
 
         response = self.cloud_mail_instance.session.put(constants.API_FILE_UPLOAD_ENDPOINT, files=files)
-
+        if response.status_code == 403:
+            response = self.cloud_mail_instance.session.put(constants.API_FILE_UPLOAD_ENDPOINT, files=files)
         return response.text, int(response.request.headers["Content-Length"])
 
     def _add(self, cloud_path: str, cloud_hash: str, file_size: int) -> dict:
@@ -51,38 +64,71 @@ class FileMethodsGroup:
         data = {
             "home": cloud_path,
             "token": self.cloud_mail_instance.csrf_token,
-            "api": 2,
-            "email": self.cloud_mail_instance.login,
-            "x-email": self.cloud_mail_instance.login,
         }
 
         return self.api(url, "post", data=data)
 
-    def move(self, from_file_path: str, to_folder_path: str):
+    def move(self, from_file_path: str, to_folder_path: str) -> dict:
         url = constants.API_FILE_MOVE_PATH
 
         data = {
             "home": from_file_path,
             "folder": to_folder_path,
-            "token": self.cloud_mail_instance.csrf_token,
-            "api": 2,
-            "email": self.cloud_mail_instance.login,
-            "x-email": self.cloud_mail_instance.login,
+            "token": self.cloud_mail_instance.csrf_token
         }
 
         return self.api(url, "post", data=data)
 
-    def rename(self, cloud_path: str, new_name: str):
+    def rename(self, cloud_path: str, new_name: str) -> dict:
         url = constants.API_FILE_RENAME_PATH
 
         data = {
             "home": cloud_path,
             "name": new_name,
             "token": self.cloud_mail_instance.csrf_token,
-            "conflict": "rename",
-            "api": 2,
-            "email": self.cloud_mail_instance.login,
-            "x-email": self.cloud_mail_instance.login,
+            "conflict": "rename"
         }
 
         return self.api(url, "post", data=data)
+
+    def publish(self, cloud_path: str):
+        url = constants.API_FILE_PUBLISH_PATH
+
+        data = {
+            "home": cloud_path,
+            "token": self.cloud_mail_instance.csrf_token
+        }
+
+        return self.api(url, "post", data=data)
+
+    def unpublish(self, web_link: str):
+        url = constants.API_FILE_UNPUBLISH_PATH
+
+        data = {
+            "weblink": web_link,
+            "token": self.cloud_mail_instance.csrf_token
+        }
+
+        return self.api(url, "post", data=data)
+
+    def copy(self, cloud_path: str, to_folder_path: str) -> dict:
+        url = constants.API_FILE_COPY_PATH
+
+        data = {
+            "home": cloud_path,
+            "folder": to_folder_path,
+            "token": self.cloud_mail_instance.csrf_token,
+            "conflict": "rename"
+        }
+
+        return self.api(url, "post", data=data)
+
+    def history(self, cloud_path: str) -> dict:
+        url = constants.API_FILE_HISTORY_PATH
+
+        data = {
+            "home": cloud_path,
+            "token": self.cloud_mail_instance.csrf_token,
+        }
+
+        return self.api(url, "get", params=data)
