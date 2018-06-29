@@ -70,7 +70,7 @@ Unofficial cloud.mail.ru's python API
 |       X      | (POST) | trashbin/empty        |                                       |
 |              | (GET)  | domain/folders        |                                       |
 |              | (POST) | promo/validate        |                                       |
-|              | (POST) | notify/applink        |                                       |
+|       X      | (POST) | notify/applink        |                                       |
 
 ## Examples of usage
 I decided implement the structure of the original API so for the `file/add` request you must call the method `MailCloud_instance.api.file.add(...)`.
