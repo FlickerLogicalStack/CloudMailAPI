@@ -11,6 +11,15 @@ class UserMethodsGroup:
         self.cloud_mail_instance = cloud_mail_instance
         self.api = api_instance
 
+    def __call__(self):
+        url = constants.API_USER_PATH
+
+        data = {
+            "token": self.cloud_mail_instance.csrf_token
+        }
+
+        return self.api(url, "get", params=data)
+
     def space(self):
         url = constants.API_USER_SPACE_PATH
 

@@ -48,7 +48,7 @@ Unofficial cloud.mail.ru's python API
 |       X      | (POST) | tokens/download       |                                       |
 |              | (GET)  | weblinks              |                                       |
 |              | (GET)  | weblinks/subscribe    |                                       |
-|              | (GET)  | user                  |                                       |
+|       X      | (GET)  | user                  |                                       |
 |              | (POST) | user/agree-la         |                                       |
 |              | (POST) | user/edit             |  Method just for redrawing frontend   |
 |              | (POST) | user/unfreeze         |                                       |
@@ -60,7 +60,7 @@ Unofficial cloud.mail.ru's python API
 |       X      | (POST) | zip                   |                                       |
 |              | (GET)  | mail/ab/contacts      |                                       |
 |              | (POST) | mail/ab/contacts/add  |                                       |
-|              | (GET)  | billing/rates         |                                       |
+|       X      | (GET)  | billing/rates         |                                       |
 |              | (POST) | billing/change        |                                       |
 |              | (POST) | billing/prolong       |                                       |
 |              | (POST) | billing/cancel        |                                       |

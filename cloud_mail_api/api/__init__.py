@@ -9,6 +9,7 @@ from .tokens import TokensMethodsGroup
 from .trashbin import TrashbinMethodsGroup
 from .single import SingleMethodsGroup
 from .user import UserMethodsGroup
+from .billing import BillingMethodsGroup
 
 
 class API:
@@ -20,6 +21,7 @@ class API:
         self.register_method_group("tokens", TokensMethodsGroup(cloud_mail_instance, self))
         self.register_method_group("trashbin", TrashbinMethodsGroup(cloud_mail_instance, self))
         self.register_method_group("user", UserMethodsGroup(cloud_mail_instance, self))
+        self.register_method_group("billing", BillingMethodsGroup(cloud_mail_instance, self))
         
         self.single_methods_group = SingleMethodsGroup(cloud_mail_instance, self)
 
