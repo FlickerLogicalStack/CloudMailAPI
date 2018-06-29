@@ -11,7 +11,7 @@ Unofficial cloud.mail.ru's python API
 |              | (POST) | stock/save            |                          |
 |              | (GET)  | dispatcher            |                          |
 |              | (POST) | docs/token            |                          |
-|              | (GET)  | file                  |                          |
+|       X      | (GET)  | file                  |                          |
 |       X      | (POST) | file/add              |                          |
 |       X      | (POST) | file/move             |                          |
 |       X      | (POST) | file/remove           |                          |
@@ -20,7 +20,7 @@ Unofficial cloud.mail.ru's python API
 |       X      | (POST) | file/publish          |                          |
 |       X      | (POST) | file/unpublish        |                          |
 |              | (GET)  | file/history          |                          |
-|              | (GET)  | folder                |                          |
+|       X      | (GET)  | folder                |                          |
 |       X      | (POST) | folder/add            |                          |
 |       X      | (POST) | folder/move           |`Alias for file/move`     |
 |       X      | (POST) | folder/remove         |`Alias for file/remove`   |

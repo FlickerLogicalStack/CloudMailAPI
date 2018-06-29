@@ -9,6 +9,16 @@ class FolderMethodsGroup:
         self.cloud_mail_instance = cloud_mail_instance
         self.api = api_instance
 
+    def __call__(self, cloud_path: str) -> dict:
+        url = constants.API_FOLDER_PATH
+
+        data = {
+            "home": cloud_path,
+            "token": self.cloud_mail_instance.csrf_token,
+        }
+
+        return self.api(url, "get", params=data)
+
     def add(self, cloud_path: str) -> dict:
         url = constants.API_FOLDER_ADD_PATH
 

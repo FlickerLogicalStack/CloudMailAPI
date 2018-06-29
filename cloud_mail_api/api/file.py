@@ -13,6 +13,16 @@ class FileMethodsGroup:
 
         self._upload_file_url = None
 
+    def __call__(self, cloud_path: str) -> dict:
+        url = constants.API_FILE_PATH
+
+        data = {
+            "home": cloud_path,
+            "token": self.cloud_mail_instance.csrf_token,
+        }
+
+        return self.api(url, "get", params=data)
+
     def _upload_file(self, file_path: str) -> Tuple[str, int]:
         files = {
             "file": (

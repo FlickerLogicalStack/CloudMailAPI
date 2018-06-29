@@ -32,15 +32,15 @@ class CloudMail:
 
             if response.get("body") == "user":
                 self.auth()
-                response = self.session.post(constants.CSRF_TOKEN_ENDPOINT).json()
+                return self.csrf_token
 
             elif response.get("body") == "nosdc":
                 self.session.get(constants.SDC_ENDPOINT)
-                response = self.session.post(constants.CSRF_TOKEN_ENDPOINT).json()
+                return self.csrf_token
             
-            if isinstance(response["body"], str):
+            if not isinstance(response["body"], dict):
                 raise errors.CloudMailUnexpectedTokenError(
-                    "Received wrong response format while obtaining token: 'body' must be dict, not str")
+                    f"Received wrong response format while obtaining token: 'body' must be dict, not {repr(response['body'])}")
 
             self._csrf_token = response["body"]["token"]
         return self._csrf_token
@@ -55,7 +55,7 @@ class CloudMail:
             raise errors.CloudMailWrongAuthData("Wrong login/password data.")
 
         if response.url == constants.DF_AUTH_ENDPOINT:
-            response = self.session.post(constants.DF_AUTH_ENDPOINT,
+            self.session.post(constants.DF_AUTH_ENDPOINT,
                 data={
                     "csrf": re.findall(r'"csrf":"(.+)","device"', response.text)[0],
                     "Login": self.login,
@@ -64,7 +64,6 @@ class CloudMail:
                 }
             )
 
-        self.session.get(constants.SDC_ENDPOINT)
         return True
 
 

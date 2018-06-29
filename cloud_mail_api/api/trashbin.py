@@ -11,7 +11,7 @@ class TrashbinMethodsGroup:
         self.cloud_mail_instance = cloud_mail_instance
         self.api = api_instance
 
-    def __call__(self, cloud_trashbin_path="/", limit=100):
+    def __call__(self, cloud_trashbin_path="/", limit=100) -> dict:
         url = constants.API_TRASHBIN_PATH
 
         data = {
@@ -22,7 +22,7 @@ class TrashbinMethodsGroup:
 
         return self(url, "get", params=data)
 
-    def restore(self, restore_revision: int, cloud_path: str):
+    def restore(self, restore_revision: int, cloud_path: str) ->dict:
         url = constants.API_TRASHBIN_RESTORE_PATH
 
         data = {
@@ -34,7 +34,7 @@ class TrashbinMethodsGroup:
 
         return self.api(url, "post", data=data)
 
-    def empty(self):
+    def empty(self) -> dict:
         url = constants.API_TRASHBIN_EMPTY_PATH
 
         data = {
