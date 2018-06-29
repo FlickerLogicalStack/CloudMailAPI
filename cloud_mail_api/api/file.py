@@ -1,134 +1,124 @@
-__all__ = ["FileMethodsGroup"]
-
 import os.path
 from typing import Tuple
 
 from .. import constants
 
-class FileMethodsGroup:
-    __slots__ = ["cloud_mail_instance", "api","_upload_file_url"]
-    def __init__(self, cloud_mail_instance, api_instance):
-        self.cloud_mail_instance = cloud_mail_instance
-        self.api = api_instance
+def file(api, cloud_path: str) -> dict:
+    url = constants.API_FILE_PATH
 
-        self._upload_file_url = None
+    data = {
+        "home": cloud_path,
+        "token": api.csrf_token,
+    }
 
-    def __call__(self, cloud_path: str) -> dict:
-        url = constants.API_FILE_PATH
+    return api(url, "get", params=data)
 
-        data = {
-            "home": cloud_path,
-            "token": self.api.csrf_token,
-        }
+def file_upload_file(api, file_path: str) -> Tuple[str, int]:
+    files = {
+        "file": (
+            os.path.basename(file_path),
+            open(file_path, "rb"),
+            "application/octet-stream"
+        )
+    }
 
-        return self.api(url, "get", params=data)
+    response = api.cloud_mail_instance.session.put(constants.API_FILE_UPLOAD_ENDPOINT, files=files)
+    if response.status_code == 403:
+        response = api.cloud_mail_instance.session.put(constants.API_FILE_UPLOAD_ENDPOINT, files=files)
+    return response.text, int(response.request.headers["Content-Length"])
 
-    def _upload_file(self, file_path: str) -> Tuple[str, int]:
-        files = {
-            "file": (
-                os.path.basename(file_path),
-                open(file_path, "rb"),
-                "application/octet-stream"
-            )
-        }
+def _add(api, cloud_path: str, cloud_hash: str, file_size: int) -> dict:
+    url = constants.API_FILE_ADD_PATH
 
-        response = self.cloud_mail_instance.session.put(constants.API_FILE_UPLOAD_ENDPOINT, files=files)
-        if response.status_code == 403:
-            response = self.cloud_mail_instance.session.put(constants.API_FILE_UPLOAD_ENDPOINT, files=files)
-        return response.text, int(response.request.headers["Content-Length"])
+    data = {
+        "home": cloud_path,
+        "hash": cloud_hash,
+        "size": file_size,
+        "token": api.csrf_token,
+        "conflict": "rename",
+        "api": 2,
+    }
 
-    def _add(self, cloud_path: str, cloud_hash: str, file_size: int) -> dict:
-        url = constants.API_FILE_ADD_PATH
+    return api(url, "post", data=data)
 
-        data = {
-            "home": cloud_path,
-            "hash": cloud_hash,
-            "size": file_size,
-            "token": self.api.csrf_token,
-            "conflict": "rename",
-            "api": 2,
-        }
+def file_add(api, local_path: str, cloud_path: str) -> dict:
+    cloud_hash, file_size = file_upload_file(api, local_path)
+    if cloud_path.endswith("/"):
+        cloud_path = os.path.join(cloud_path, os.path.basename(local_path))
 
-        return self.api(url, "post", data=data)
+    return api._add(cloud_path, cloud_hash, file_size)
 
-    def add(self, local_path: str, cloud_path: str) -> dict:
-        cloud_hash, file_size = self._upload_file(local_path)
-        if cloud_path.endswith("/"):
-            cloud_path = os.path.join(cloud_path, os.path.basename(local_path))
+def file_remove(api, cloud_path: str) -> dict:
+    url = constants.API_FILE_REMOVE_PATH
 
-        return self._add(cloud_path, cloud_hash, file_size)
+    data = {
+        "home": cloud_path,
+        "token": api.csrf_token,
+    }
 
-    def remove(self, cloud_path: str) -> dict:
-        url = constants.API_FILE_REMOVE_PATH
+    return api(url, "post", data=data)
 
-        data = {
-            "home": cloud_path,
-            "token": self.api.csrf_token,
-        }
+def file_move(api, cloud_path: str, to_folder_path: str) -> dict:
+    url = constants.API_FILE_MOVE_PATH
 
-        return self.api(url, "post", data=data)
+    data = {
+        "home": cloud_path,
+        "folder": to_folder_path,
+        "token": api.csrf_token
+    }
 
-    def move(self, from_file_path: str, to_folder_path: str) -> dict:
-        url = constants.API_FILE_MOVE_PATH
+    return api(url, "post", data=data)
 
-        data = {
-            "home": from_file_path,
-            "folder": to_folder_path,
-            "token": self.api.csrf_token
-        }
+def file_rename(api, cloud_path: str, new_name: str) -> dict:
+    url = constants.API_FILE_RENAME_PATH
 
-        return self.api(url, "post", data=data)
+    data = {
+        "home": cloud_path,
+        "name": new_name,
+        "token": api.csrf_token,
+        "conflict": "rename"
+    }
 
-    def rename(self, cloud_path: str, new_name: str) -> dict:
-        url = constants.API_FILE_RENAME_PATH
+    return api(url, "post", data=data)
 
-        data = {
-            "home": cloud_path,
-            "name": new_name,
-            "token": self.api.csrf_token,
-            "conflict": "rename"
-        }
+def file_publish(api, cloud_path: str) -> dict:
+    url = constants.API_FILE_PUBLISH_PATH
 
-        return self.api(url, "post", data=data)
+    data = {
+        "home": cloud_path,
+        "token": api.csrf_token
+    }
 
-    def publish(self, cloud_path: str):
-        url = constants.API_FILE_PUBLISH_PATH
+    return api(url, "post", data=data)
 
-        data = {
-            "home": cloud_path,
-            "token": self.api.csrf_token
-        }
+def file_unpublish(api, web_link: str) -> dict:
+    url = constants.API_FILE_UNPUBLISH_PATH
 
-        return self.api(url, "post", data=data)
+    data = {
+        "weblink": web_link,
+        "token": api.csrf_token
+    }
 
-    def unpublish(self, web_link: str):
-        url = constants.API_FILE_UNPUBLISH_PATH
+    return api(url, "post", data=data)
 
-        data = {
-            "weblink": web_link,
-            "token": self.api.csrf_token
-        }
+def file_copy(api, cloud_path: str, to_folder_path: str) -> dict:
+    url = constants.API_FILE_COPY_PATH
 
-        return self.api(url, "post", data=data)
+    data = {
+        "home": cloud_path,
+        "folder": to_folder_path,
+        "token": api.csrf_token,
+        "conflict": "rename"
+    }
 
-    def copy(self, cloud_path: str, to_folder_path: str) -> dict:
-        url = constants.API_FILE_COPY_PATH
+    return api(url, "post", data=data)
 
-        data = {
-            "home": cloud_path,
-            "folder": to_folder_path,
-            "token": self.api.csrf_token,
-            "conflict": "rename"
-        }
+def file_history(api, cloud_path: str) -> dict:
+    url = constants.API_FILE_HISTORY_PATH
 
-        return self.api(url, "post", data=data)
+    data = {
+        "home": cloud_path,
+        "token": api.csrf_token,
+    }
 
-    def history(self, cloud_path: str) -> dict:
-        url = constants.API_FILE_HISTORY_PATH
-
-        data = {
-            "home": cloud_path,
-            "token": self.api.csrf_token,
-        }
-
-        return self.api(url, "get", params=data)
+    return api(url, "get", params=data)

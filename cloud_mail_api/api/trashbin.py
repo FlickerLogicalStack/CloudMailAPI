@@ -1,44 +1,33 @@
-__all__ = ["TrashbinMethodsGroup"]
-
-import os.path
-
 from .. import constants
-from .. import errors
 
-class TrashbinMethodsGroup:
-    __slots__ = ["cloud_mail_instance", "api"]
-    def __init__(self, cloud_mail_instance, api_instance):
-        self.cloud_mail_instance = cloud_mail_instance
-        self.api = api_instance
+def trashbin(api, cloud_trashbin_path="/", limit=100) -> dict:
+    url = constants.API_TRASHBIN_PATH
 
-    def __call__(self, cloud_trashbin_path="/", limit=100) -> dict:
-        url = constants.API_TRASHBIN_PATH
+    data = {
+        "home": cloud_trashbin_path,
+        "limit": limit,
+        "token": api.csrf_token,
+    }
 
-        data = {
-            "home": cloud_trashbin_path,
-            "limit": limit,
-            "token": self.api.csrf_token,
-        }
+    return api(url, "get", params=data)
 
-        return self(url, "get", params=data)
+def trashbin_restore(api, restore_revision: int, cloud_path: str) -> dict:
+    url = constants.API_TRASHBIN_RESTORE_PATH
 
-    def restore(self, restore_revision: int, cloud_path: str) ->dict:
-        url = constants.API_TRASHBIN_RESTORE_PATH
+    data = {
+        "restore_revision": restore_revision,
+        "path": cloud_path,
+        "token": api.csrf_token,   
+        "conflict": "rename"
+    }
 
-        data = {
-            "restore_revision": restore_revision,
-            "path": cloud_path,
-            "token": self.api.csrf_token,   
-            "conflict": "rename"
-        }
+    return api(url, "post", data=data)
 
-        return self.api(url, "post", data=data)
+def trashbin_empty(api) -> dict:
+    url = constants.API_TRASHBIN_EMPTY_PATH
 
-    def empty(self) -> dict:
-        url = constants.API_TRASHBIN_EMPTY_PATH
+    data = {
+        "token": api.csrf_token
+    }
 
-        data = {
-            "token": self.api.csrf_token
-        }
-
-        return self.api(url, "post", data=data)
+    return api(url, "post", data=data)

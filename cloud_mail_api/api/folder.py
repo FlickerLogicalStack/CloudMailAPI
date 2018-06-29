@@ -1,98 +1,25 @@
-__all__ = ["FolderMethodsGroup"]
-
-import os.path
 from .. import constants
 
-class FolderMethodsGroup:
-    __slots__ = ["cloud_mail_instance", "api"]
-    def __init__(self, cloud_mail_instance, api_instance):
-        self.cloud_mail_instance = cloud_mail_instance
-        self.api = api_instance
+def folder(api, cloud_path: str, limit=100, offset=0, sort={"type":"name","order":"asc"}) -> dict:
+    url = constants.API_FOLDER_PATH
 
-    def __call__(self, cloud_path: str, limit=100, offset=0, sort={"type":"name","order":"asc"}) -> dict:
-        url = constants.API_FOLDER_PATH
+    data = {
+        "home": cloud_path,
+        "token": api.csrf_token,
+        "limit": limit,
+        "offset": offset,
+        "sort": sort,
+    }
 
-        data = {
-            "home": cloud_path,
-            "token": self.api.csrf_token,
-            "limit": limit,
-            "offset": offset,
-            "sort": sort,
-        }
+    return api(url, "get", params=data)
 
-        return self.api(url, "get", params=data)
+def folder_add(api, cloud_path: str) -> dict:
+    url = constants.API_FOLDER_ADD_PATH
 
-    def add(self, cloud_path: str) -> dict:
-        url = constants.API_FOLDER_ADD_PATH
+    data = {
+        "home": cloud_path,
+        "conflict": "rename",
+        "token": api.csrf_token
+    }
 
-        data = {
-            "home": cloud_path,
-            "conflict": "rename",
-            "token": self.api.csrf_token
-        }
-
-        return self.api(url, "post", data=data)
-
-    def remove(self, cloud_path: str) -> dict:
-        url = constants.API_FOLDER_REMOVE_PATH
-
-        data = {
-            "home": cloud_path,
-            "token": self.api.csrf_token
-        }
-
-        return self.api(url, "post", data=data)
-
-    def move(self, folder_path: str, to_folder_path: str):
-        url = constants.API_FOLDER_MOVE_PATH
-
-        data = {
-            "home": folder_path,
-            "folder": to_folder_path,
-            "token": self.api.csrf_token
-        }
-
-        return self.api(url, "post", data=data)
-
-    def rename(self, cloud_path: str, new_name: str):
-        url = constants.API_FOLDER_RENAME_PATH
-
-        data = {
-            "home": cloud_path,
-            "name": new_name,
-            "token": self.api.csrf_token
-        }
-
-        return self.api(url, "post", data=data)
-
-    def publish(self, cloud_path: str):
-        url = constants.API_FOLDER_PUBLISH_PATH
-
-        data = {
-            "home": cloud_path,
-            "token": self.api.csrf_token
-        }
-
-        return self.api(url, "post", data=data)
-
-    def unpublish(self, web_link: str):
-        url = constants.API_FOLDER_UNPUBLISH_PATH
-
-        data = {
-            "weblink": web_link,
-            "token": self.api.csrf_token
-        }
-
-        return self.api(url, "post", data=data)
-
-    def copy(self, cloud_path: str, to_folder_path: str) -> dict:
-        url = constants.API_FOLDER_COPY_PATH
-
-        data = {
-            "home": cloud_path,
-            "folder": to_folder_path,
-            "token": self.api.csrf_token,
-            "conflict": "rename"
-        }
-
-        return self.api(url, "post", data=data)
+    return api(url, "post", data=data)

@@ -1,22 +1,11 @@
-__all__ = ["NotifyMethodsGroup"]
-
-import os.path
-
 from .. import constants
-from .. import errors
 
-class NotifyMethodsGroup:
-    __slots__ = ["cloud_mail_instance", "api"]
-    def __init__(self, cloud_mail_instance, api_instance):
-        self.cloud_mail_instance = cloud_mail_instance
-        self.api = api_instance
+def notify_applink(api, phone_number: str) -> dict:
+    url = constants.API_APPLINK_PATH
 
-    def applink(self, phone_number: str):
-        url = constants.API_APPLINK_PATH
+    data = {
+        "phone": phone_number,
+        "token": api.csrf_token
+    }
 
-        data = {
-            "phone": phone_number,
-            "token": self.api.csrf_token
-        }
-
-        return self.api(url, "post", json=data)
+    return api(url, "post", json=data)

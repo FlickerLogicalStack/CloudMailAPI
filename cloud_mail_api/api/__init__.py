@@ -4,14 +4,57 @@ from requests.cookies import RequestsCookieJar
 
 from .. import constants
 from .. import errors
-from .file import FileMethodsGroup
-from .folder import FolderMethodsGroup
-from .tokens import TokensMethodsGroup
-from .trashbin import TrashbinMethodsGroup
-from .single import SingleMethodsGroup
-from .user import UserMethodsGroup
-from .billing import BillingMethodsGroup
-from .notify import NotifyMethodsGroup
+
+from . import billing
+from . import file
+from . import folder
+from . import notify
+from . import single
+from . import tokens
+from . import trashbin
+from . import user
+
+
+class MethodsStore:
+    def __init__(self):
+        self.links = {
+            "tokens/csrf": tokens.tokens_csrf,
+            "tokens/download": tokens.tokens_download,
+            
+            "trashbin": trashbin.trashbin,
+            "trashbin/restore": trashbin.trashbin_restore,
+            "trashbin/empty": trashbin.trashbin_empty,
+            
+            "user": user.user,
+            "user/space": user.user_space,
+            
+            "billing/rates": billing.billing_rates,
+            
+            "zip": single.zip,
+            "dispatcher": single.dispatcher,
+            "notify/applink": notify.notify_applink,
+
+            "folder": folder.folder,
+            "folder/add": folder.folder_add,
+            "folder/move": file.file_move,
+            "folder/remove": file.file_remove,
+            "folder/rename": file.file_rename,
+            "folder/copy": file.file_copy,
+            "folder/publish": file.file_publish,
+            "folder/unpublish": file.file_unpublish,
+
+            "file": file.file,
+            "file/add": file.file_add,
+            "file/move": file.file_move,
+            "file/remove": file.file_remove,
+            "file/rename": file.file_rename,
+            "file/copy": file.file_copy,
+            "file/publish": file.file_publish,
+            "file/unpublish": file.file_unpublish,
+        }
+
+    def get_method(self, url):
+        return self.links.get(url)
 
 
 class API:
@@ -20,25 +63,24 @@ class API:
 
         self._csrf_token = None
 
-        self.register_method_group("file", FileMethodsGroup(cloud_mail_instance, self))
-        self.register_method_group("folder", FolderMethodsGroup(cloud_mail_instance, self))
-        self.register_method_group("tokens", TokensMethodsGroup(cloud_mail_instance, self))
-        self.register_method_group("trashbin", TrashbinMethodsGroup(cloud_mail_instance, self))
-        self.register_method_group("user", UserMethodsGroup(cloud_mail_instance, self))
-        self.register_method_group("billing", BillingMethodsGroup(cloud_mail_instance, self))
-        self.register_method_group("notify", NotifyMethodsGroup(cloud_mail_instance, self))
-        
-        self.single_methods_group = SingleMethodsGroup(cloud_mail_instance, self)
-
-    def register_method_group(self, name, methods_group):
-        if name not in self.__dict__:
-            setattr(self, name, methods_group)
+        self.__is_url_cycle = False
+        self.__url_parts = []
+        self.methods_store = MethodsStore()
 
     def __getattr__(self, name):
-        if name not in vars(self):
-            if name in dir(self.single_methods_group):
-                return getattr(self.single_methods_group, name)
-        return super().__getattribute__(name)
+        if self.__is_url_cycle:
+            self.__url_parts.append(name)
+            return self
+        else:
+            if name not in dir(self):
+                self.__is_url_cycle = True
+            return getattr(self, name)
+
+    def __call__(self, *args, **kwargs) -> dict:
+        if self.__is_url_cycle:
+            return self.url_resolver(*args, **kwargs)
+        else:
+            return self.raw_api_caller(*args, **kwargs)
 
     @property
     def session(self) -> RequestsCookieJar:
@@ -60,11 +102,11 @@ class API:
             self._csrf_token = response["body"]["token"]
         return self._csrf_token
 
-    def sdc(self):
+    def sdc(self) -> bool:
         response = self.cloud_mail_instance.session.get(constants.SDC_ENDPOINT)
         return response.status_code == 200
 
-    def __call__(self, path: str, http_method: str, fullpath=False, **kwargs) -> dict:
+    def raw_api_caller(self, path: str, http_method: str, fullpath=False, **kwargs) -> dict:
         if fullpath:
             url = path
         else:
@@ -75,3 +117,14 @@ class API:
             url, headers={"X-Requested-With": "XMLHttpRequest"}, **kwargs)
 
         return response.json()
+
+    def url_resolver(self, *args, **kwargs) -> dict:
+        url = "/".join(self.__url_parts)
+        self.__url_parts.clear()
+        self.__is_url_cycle = False
+
+        method = self.methods_store.get_method(url)
+        if method is not None:
+            return method(self, *args, **kwargs)
+        else:
+            raise NotImplementedError("No such method in implemented api")
