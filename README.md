@@ -56,8 +56,8 @@ Unofficial cloud.mail.ru's python API
 |              | (POST) | user/promo/ignore     |                          |
 |              | (POST) | user/promo/invite     |                          |
 |              | (POST) | user/promo/join       |                          |
-|              | (GET)  | user/space            |                          |
-|              | (POST) | zip                   |                          |
+|       X      | (GET)  | user/space            |                          |
+|       X      | (POST) | zip                   |                          |
 |              | (GET)  | mail/ab/contacts      |                          |
 |              | (POST) | mail/ab/contacts/add  |                          |
 |              | (GET)  | billing/rates         |                          |
