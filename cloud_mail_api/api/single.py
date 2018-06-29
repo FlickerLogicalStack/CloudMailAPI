@@ -18,7 +18,7 @@ class SingleMethodsGroup:
         data = {
             "home_list": str(cloud_paths).replace("'", '"'),
             "name": name,
-            "token": self.cloud_mail_instance.csrf_token
+            "token": self.api.csrf_token
         }
 
         return self.api(url, "post", data=data)
@@ -27,7 +27,7 @@ class SingleMethodsGroup:
         url = constants.API_DISPATCHER_PATH
 
         data = {
-            "token": self.cloud_mail_instance.csrf_token
+            "token": self.api.csrf_token
         }
 
         return self.api(url, "get", params=data)

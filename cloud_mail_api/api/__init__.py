@@ -3,6 +3,7 @@ __all__ = ["API"]
 from requests.cookies import RequestsCookieJar
 
 from .. import constants
+from .. import errors
 from .file import FileMethodsGroup
 from .folder import FolderMethodsGroup
 from .tokens import TokensMethodsGroup
@@ -16,6 +17,8 @@ from .notify import NotifyMethodsGroup
 class API:
     def __init__(self, cloud_mail_instance):
         self.cloud_mail_instance = cloud_mail_instance
+
+        self._csrf_token = None
 
         self.register_method_group("file", FileMethodsGroup(cloud_mail_instance, self))
         self.register_method_group("folder", FolderMethodsGroup(cloud_mail_instance, self))
@@ -43,7 +46,19 @@ class API:
 
     @property
     def csrf_token(self) -> str:
-        return self.cloud_mail_instance.csrf_token
+        if self._csrf_token is None:
+            response = self.tokens.csrf(True)
+
+            if response.get("body") == "user":
+                self.cloud_mail_instance.auth()
+                return self.csrf_token
+            
+            if not isinstance(response["body"], dict):
+                raise errors.CloudMailUnexpectedTokenError(
+                    f"Received wrong response format while obtaining token: 'body' must be dict, not {repr(response['body'])}")
+
+            self._csrf_token = response["body"]["token"]
+        return self._csrf_token
 
     def sdc(self):
         response = self.cloud_mail_instance.session.get(constants.SDC_ENDPOINT)

@@ -15,7 +15,7 @@ class BillingMethodsGroup:
         url = constants.API_BILLING_RATES_PATH
 
         data = {
-            "token": self.cloud_mail_instance.csrf_token,
+            "token": self.api.csrf_token,
         }
 
         return self.api(url, "get", params=data)

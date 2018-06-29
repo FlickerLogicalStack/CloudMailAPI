@@ -18,7 +18,7 @@ class FileMethodsGroup:
 
         data = {
             "home": cloud_path,
-            "token": self.cloud_mail_instance.csrf_token,
+            "token": self.api.csrf_token,
         }
 
         return self.api(url, "get", params=data)
@@ -44,7 +44,7 @@ class FileMethodsGroup:
             "home": cloud_path,
             "hash": cloud_hash,
             "size": file_size,
-            "token": self.cloud_mail_instance.csrf_token,
+            "token": self.api.csrf_token,
             "conflict": "rename",
             "api": 2,
         }
@@ -63,7 +63,7 @@ class FileMethodsGroup:
 
         data = {
             "home": cloud_path,
-            "token": self.cloud_mail_instance.csrf_token,
+            "token": self.api.csrf_token,
         }
 
         return self.api(url, "post", data=data)
@@ -74,7 +74,7 @@ class FileMethodsGroup:
         data = {
             "home": from_file_path,
             "folder": to_folder_path,
-            "token": self.cloud_mail_instance.csrf_token
+            "token": self.api.csrf_token
         }
 
         return self.api(url, "post", data=data)
@@ -85,7 +85,7 @@ class FileMethodsGroup:
         data = {
             "home": cloud_path,
             "name": new_name,
-            "token": self.cloud_mail_instance.csrf_token,
+            "token": self.api.csrf_token,
             "conflict": "rename"
         }
 
@@ -96,7 +96,7 @@ class FileMethodsGroup:
 
         data = {
             "home": cloud_path,
-            "token": self.cloud_mail_instance.csrf_token
+            "token": self.api.csrf_token
         }
 
         return self.api(url, "post", data=data)
@@ -106,7 +106,7 @@ class FileMethodsGroup:
 
         data = {
             "weblink": web_link,
-            "token": self.cloud_mail_instance.csrf_token
+            "token": self.api.csrf_token
         }
 
         return self.api(url, "post", data=data)
@@ -117,7 +117,7 @@ class FileMethodsGroup:
         data = {
             "home": cloud_path,
             "folder": to_folder_path,
-            "token": self.cloud_mail_instance.csrf_token,
+            "token": self.api.csrf_token,
             "conflict": "rename"
         }
 
@@ -128,7 +128,7 @@ class FileMethodsGroup:
 
         data = {
             "home": cloud_path,
-            "token": self.cloud_mail_instance.csrf_token,
+            "token": self.api.csrf_token,
         }
 
         return self.api(url, "get", params=data)

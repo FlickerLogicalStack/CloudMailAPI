@@ -16,7 +16,7 @@ class NotifyMethodsGroup:
 
         data = {
             "phone": phone_number,
-            "token": self.cloud_mail_instance.csrf_token
+            "token": self.api.csrf_token
         }
 
         return self.api(url, "post", json=data)

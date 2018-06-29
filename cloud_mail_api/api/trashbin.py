@@ -17,7 +17,7 @@ class TrashbinMethodsGroup:
         data = {
             "home": cloud_trashbin_path,
             "limit": limit,
-            "token": self.cloud_mail_instance.csrf_token,
+            "token": self.api.csrf_token,
         }
 
         return self(url, "get", params=data)
@@ -28,7 +28,7 @@ class TrashbinMethodsGroup:
         data = {
             "restore_revision": restore_revision,
             "path": cloud_path,
-            "token": self.cloud_mail_instance.csrf_token,   
+            "token": self.api.csrf_token,   
             "conflict": "rename"
         }
 
@@ -38,7 +38,7 @@ class TrashbinMethodsGroup:
         url = constants.API_TRASHBIN_EMPTY_PATH
 
         data = {
-            "token": self.cloud_mail_instance.csrf_token
+            "token": self.api.csrf_token
         }
 
         return self.api(url, "post", data=data)

@@ -15,7 +15,7 @@ class UserMethodsGroup:
         url = constants.API_USER_PATH
 
         data = {
-            "token": self.cloud_mail_instance.csrf_token
+            "token": self.api.csrf_token
         }
 
         return self.api(url, "get", params=data)
@@ -24,7 +24,7 @@ class UserMethodsGroup:
         url = constants.API_USER_SPACE_PATH
 
         data = {
-            "token": self.cloud_mail_instance.csrf_token
+            "token": self.api.csrf_token
         }
 
         return self.api(url, "get", params=data)

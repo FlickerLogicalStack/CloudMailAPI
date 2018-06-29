@@ -14,7 +14,7 @@ class FolderMethodsGroup:
 
         data = {
             "home": cloud_path,
-            "token": self.cloud_mail_instance.csrf_token,
+            "token": self.api.csrf_token,
             "limit": limit,
             "offset": offset,
             "sort": sort,
@@ -28,7 +28,7 @@ class FolderMethodsGroup:
         data = {
             "home": cloud_path,
             "conflict": "rename",
-            "token": self.cloud_mail_instance.csrf_token
+            "token": self.api.csrf_token
         }
 
         return self.api(url, "post", data=data)
@@ -38,7 +38,7 @@ class FolderMethodsGroup:
 
         data = {
             "home": cloud_path,
-            "token": self.cloud_mail_instance.csrf_token
+            "token": self.api.csrf_token
         }
 
         return self.api(url, "post", data=data)
@@ -49,7 +49,7 @@ class FolderMethodsGroup:
         data = {
             "home": folder_path,
             "folder": to_folder_path,
-            "token": self.cloud_mail_instance.csrf_token
+            "token": self.api.csrf_token
         }
 
         return self.api(url, "post", data=data)
@@ -60,7 +60,7 @@ class FolderMethodsGroup:
         data = {
             "home": cloud_path,
             "name": new_name,
-            "token": self.cloud_mail_instance.csrf_token
+            "token": self.api.csrf_token
         }
 
         return self.api(url, "post", data=data)
@@ -70,7 +70,7 @@ class FolderMethodsGroup:
 
         data = {
             "home": cloud_path,
-            "token": self.cloud_mail_instance.csrf_token
+            "token": self.api.csrf_token
         }
 
         return self.api(url, "post", data=data)
@@ -80,7 +80,7 @@ class FolderMethodsGroup:
 
         data = {
             "weblink": web_link,
-            "token": self.cloud_mail_instance.csrf_token
+            "token": self.api.csrf_token
         }
 
         return self.api(url, "post", data=data)
@@ -91,7 +91,7 @@ class FolderMethodsGroup:
         data = {
             "home": cloud_path,
             "folder": to_folder_path,
-            "token": self.cloud_mail_instance.csrf_token,
+            "token": self.api.csrf_token,
             "conflict": "rename"
         }
 
