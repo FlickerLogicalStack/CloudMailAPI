@@ -45,7 +45,7 @@ class MethodsStore:
 
             "file": file.file,
             "file/add": file.file_add,
-            "file/_uload_file": file.file_upload_file,
+            "file/_upload_file": file.file_upload_file,
             "file/move": file.file_move,
             "file/remove": file.file_remove,
             "file/rename": file.file_rename,
@@ -117,7 +117,10 @@ class API:
         response = getattr(self.session, http_method.lower())(
             url, headers={"X-Requested-With": "XMLHttpRequest"}, **kwargs)
 
-        return response.json()
+        if "application/json" in response.headers["Content-Type"]:
+            return response.json()
+        else:
+            return response
 
     def url_resolver(self, *args, **kwargs) -> dict:
         url = "/".join(self.__url_parts)

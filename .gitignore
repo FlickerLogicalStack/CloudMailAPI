@@ -106,3 +106,4 @@ cookies.json
 tests.py
 *.sublime-workspace
 *.sublime-project
+*.backup

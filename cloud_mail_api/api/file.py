@@ -25,6 +25,7 @@ def file_upload_file(api, local_path: str) -> Tuple[str, int]:
     response = api.cloud_mail_instance.session.put(constants.API_FILE_UPLOAD_ENDPOINT, files=files)
     if response.status_code == 403:
         response = api.cloud_mail_instance.session.put(constants.API_FILE_UPLOAD_ENDPOINT, files=files)
+    print(response.request.headers["Content-Type"])
     return response.text, int(response.request.headers["Content-Length"])
 
 def _add(api, cloud_path: str, cloud_hash: str, file_size: int) -> dict:
@@ -46,7 +47,7 @@ def file_add(api, local_path: str, cloud_path: str) -> dict:
     if cloud_path.endswith("/"):
         cloud_path = os.path.join(cloud_path, os.path.basename(local_path))
 
-    return api._add(cloud_path, cloud_hash, file_size)
+    return _add(api, cloud_path, cloud_hash, file_size)
 
 def file_remove(api, cloud_path: str) -> dict:
     url = constants.API_FILE_REMOVE_PATH
