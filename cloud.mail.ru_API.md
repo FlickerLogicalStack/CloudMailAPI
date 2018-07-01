@@ -74,9 +74,16 @@ or
 All kwargs after `fullpath` will be passed directly on `requests`'s request method (get/post/put)
 - `data` for pass dict as *application/x-www-form-urlencoded*
 - `json` for pass dict as *application/json*
-- `params` for pass dict in query
+- `params` for pass dict as query
 
 ### Methods
+#### About 'conflict'
+In some methods (like file.add, folder.rename, etc), which may cause a conflict of names you can add a field `conflict`\
+- `conflict` == `rename`: Server will rename file/folder as if you created the file/folder with the existing in the current directory name in Windows.
+- `conflict` != `rename`: Server will raise exception `File(folder) already exist` or something like that.
+
+*Default behavior is rename on conflict and you just need to pass `False` to change this*
+
 #### File Group
 #### *cloud.mail.ru/api/v2/file* 
 - Method: `GET`
@@ -112,14 +119,16 @@ All kwargs after `fullpath` will be passed directly on `requests`'s request meth
  'status': 200,
  'time': 1530371015566}
 ```
-- PyAPI: `>>> cm.api.file.add(local_path: str, cloud_path: str)`
+- PyAPI: `>>> cm.api.file.add(local_path: str, cloud_path: str, rename_on_conflict=True)`
   - `local_path`: path to file in the local env
   - `cloud_path`: path to file in the cloud env
+  - `rename_on_conflict`: see [About conflict](#about-conflict) section
 - CloudAPI: `POST https://cloud.mail.ru/api/v2/file/add`
   - Urlencoded Form Data:
     - `home`: **as `cloud_path` in PyAPI**
     - `hash`: server file hash (SHA1 + salt), can be obtain by method `api.file._upload`
     - `size`: file size (Content-Lenght of PUT request while uploading file), can be obtain by method `api.file._upload`
+    - `conflict`: see [About conflict](#about-conflict) section
     - `token`: `csrf` token, see method `tokens/csrf`
 
 #### *clocloXXX-upload.cloud.mail.ru/upload/*
@@ -130,7 +139,7 @@ All kwargs after `fullpath` will be passed directly on `requests`'s request meth
 '1AA3F87D2F472FF076CB7E532B4543ACC706D0CB'
 - PyAPI Response example:
 ('1AA3F87D2F472FF076CB7E532B4543ACC706D0CB', 662)
-*where second element - size of the file*
+  - *where second element - size of the file*
 - PyAPI: `>>> cm.api.file.add(local_path: str, cloud_path: str)`
   - `local_path`: path to file in the local env
 - CloudAPI: `PUT clocloXXX-upload.cloud.mail.ru/upload/`
@@ -153,3 +162,136 @@ All kwargs after `fullpath` will be passed directly on `requests`'s request meth
     >>> print(response.text, response.request.headers["Content-Length"])
     '4DE2BA407D546C7CFD34727B2FABC8CD41B4D2CD', '662'
     ```
+#### *cloud.mail.ru/api/v2/file/remove* 
+- Method: `POST`
+- Description: remove a file from the cloud
+- Response example:
+```
+{'body': '/Garbage/cookies.json',
+ 'email': 'email@mail.ru',
+ 'status': 200,
+ 'time': 1530448995599}
+```
+- PyAPI: `>>> cm.api.file.remove(cloud_path: str)`
+  - `cloud_path`: path to file in the cloud env
+- CloudAPI: `POST https://cloud.mail.ru/api/v2/file/remove`
+  - Urlencoded Form Data:
+    - `home`: **as `cloud_path` in PyAPI**
+    - `token`: `csrf` token, see method `tokens/csrf`
+
+#### *cloud.mail.ru/api/v2/file/move* 
+- Method: `POST`
+- Description: move a file to another folder in the cloud
+- Response example:
+```
+{'body': '/Garbage/TestDir/cookies.json',
+ 'email': '9medved@mail.ru',
+ 'status': 200,
+ 'time': 1530449141906}
+```
+- PyAPI: `>>> cm.api.file.move(cloud_path: str, to_folder_path: str)`
+  - `cloud_path`: path to file in the cloud env
+  - `to_folder_path`: path to folder in while cloud will move file
+- CloudAPI: `POST https://cloud.mail.ru/api/v2/file/move`
+  - Urlencoded Form Data:
+    - `home`: **as `cloud_path` in PyAPI**
+    - `folder`: **as `to_folder_path` in PyAPI**
+    - `token`: `csrf` token, see method `tokens/csrf`
+
+#### *cloud.mail.ru/api/v2/file/rename* 
+- Method: `POST`
+- Description: rename the file
+- Response example:
+```
+{'body': '/Garbage/TestDir/cookies_renamed.json',
+ 'email': '9medved@mail.ru',
+ 'status': 200,
+ 'time': 1530449171906}
+```
+- PyAPI: `>>> cm.api.file.rename(cloud_path: str, new_name: str, rename_on_conflict=True)`
+  - `cloud_path`: path to file in the cloud env
+  - `new_name`: new file name
+  - `rename_on_conflict`: see [About conflict](#about-conflict) section
+- CloudAPI: `POST https://cloud.mail.ru/api/v2/file/rename`
+  - Urlencoded Form Data:
+    - `home`: **as `cloud_path` in PyAPI**
+    - `name`: **as `new_name` in PyAPI**
+    - `conflict`: see [About conflict](#about-conflict) section
+    - `token`: `csrf` token, see method `tokens/csrf`
+
+#### *cloud.mail.ru/api/v2/file/publish* 
+- Method: `POST`
+- Description: publish the file
+  - Return weblink to a file
+- Response example:
+```
+{'body': '6Piv/KCVSUz6BC',
+ 'email': '9medved@mail.ru',
+ 'status': 200,
+ 'time': 1530450666068}
+```
+- PyAPI: `>>> cm.api.file.publish(cloud_path: str)`
+  - `cloud_path`: path to file in the cloud env
+- CloudAPI: `POST https://cloud.mail.ru/api/v2/file/publish`
+  - Urlencoded Form Data:
+    - `home`: **as `cloud_path` in PyAPI**
+    - `token`: `csrf` token, see method `tokens/csrf`
+
+#### *cloud.mail.ru/api/v2/file/unpublish* 
+- Method: `POST`
+- Description: unpublish the file
+- Response example:
+```
+{'body': '/garbage/qwe.json',
+ 'email': '9medved@mail.ru',
+ 'status': 200,
+ 'time': 1530450815567}
+```
+- PyAPI: `>>> cm.api.file.unpublish(web_link: str)`
+  - `web_link`: web link of the file
+- CloudAPI: `POST https://cloud.mail.ru/api/v2/file/unpublish`
+  - Urlencoded Form Data:
+    - `weblink`: **as `web_link` in PyAPI**
+    - `token`: `csrf` token, see method `tokens/csrf`
+
+#### *cloud.mail.ru/api/v2/file/copy* 
+- Method: `POST`
+- Description: copy file to another folder
+- Response example:
+```
+{'body': '/Garbage/TestDir (1)/TestDir',
+ 'email': '9medved@mail.ru',
+ 'status': 200,
+ 'time': 1530450984825}
+```
+- PyAPI: `>>> cm.api.file.rename(cloud_path: str, to_folder_path: str, rename_on_conflict=True)`
+  - `cloud_path`: path to file in the cloud env
+  - `to_folder_path`: copy's folder path
+  - `rename_on_conflict`: see [About conflict](#about-conflict) section
+- CloudAPI: `POST https://cloud.mail.ru/api/v2/file/copy`
+  - Urlencoded Form Data:
+    - `home`: **as `cloud_path` in PyAPI**
+    - `folder`: **as `to_folder_path` in PyAPI**
+    - `conflict`: see [About conflict](#about-conflict) section
+    - `token`: `csrf` token, see method `tokens/csrf`
+
+#### *cloud.mail.ru/api/v2/file/history* 
+- Method: `GET`
+- Description: get history of the file
+- Response example:
+```
+{'body': [{'name': 'ast.py',
+           'path': '/Garbage/ast.py',
+           'size': 12670,
+           'time': 1530268079,
+           'uid': 170724211}],
+ 'email': '9medved@mail.ru',
+ 'status': 200,
+ 'time': 1530451191051}
+```
+- PyAPI: `>>> cm.api.file.history(cloud_path: str)`
+  - `cloud_path`: path to file in the cloud env
+- CloudAPI: `GET https://cloud.mail.ru/api/v2/file/history`
+  - Query Data:
+    - `home`: **as `cloud_path` in PyAPI**
+    - `token`: `csrf` token, see method `tokens/csrf`

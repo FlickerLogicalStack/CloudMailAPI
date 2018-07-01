@@ -52,6 +52,7 @@ class MethodsStore:
             "file/copy": file.file_copy,
             "file/publish": file.file_publish,
             "file/unpublish": file.file_unpublish,
+            "file/history": file.file_history,
         }
 
     def get_method(self, url):
