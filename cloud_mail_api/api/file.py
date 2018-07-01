@@ -28,7 +28,7 @@ def file_upload_file(api, local_path: str) -> Tuple[str, int]:
     print(response.request.headers["Content-Type"])
     return response.text, int(response.request.headers["Content-Length"])
 
-def _add(api, cloud_path: str, cloud_hash: str, file_size: int) -> dict:
+def _add(api, cloud_path: str, cloud_hash: str, file_size: int, rename_on_conflict=True) -> dict:
     url = constants.API_FILE_ADD_PATH
 
     data = {
@@ -36,9 +36,10 @@ def _add(api, cloud_path: str, cloud_hash: str, file_size: int) -> dict:
         "hash": cloud_hash,
         "size": file_size,
         "token": api.csrf_token,
-        "conflict": "rename",
         "api": 2,
     }
+    if rename_on_conflict:
+        data.update({"conflict": "rename"})
 
     return api(url, "post", data=data)
 
@@ -70,15 +71,16 @@ def file_move(api, cloud_path: str, to_folder_path: str) -> dict:
 
     return api(url, "post", data=data)
 
-def file_rename(api, cloud_path: str, new_name: str) -> dict:
+def file_rename(api, cloud_path: str, new_name: str, rename_on_conflict=True) -> dict:
     url = constants.API_FILE_RENAME_PATH
 
     data = {
         "home": cloud_path,
         "name": new_name,
         "token": api.csrf_token,
-        "conflict": "rename"
     }
+    if rename_on_conflict:
+        data.update({"conflict": "rename"})
 
     return api(url, "post", data=data)
 
@@ -102,15 +104,16 @@ def file_unpublish(api, web_link: str) -> dict:
 
     return api(url, "post", data=data)
 
-def file_copy(api, cloud_path: str, to_folder_path: str) -> dict:
+def file_copy(api, cloud_path: str, to_folder_path: str, rename_on_conflict=True) -> dict:
     url = constants.API_FILE_COPY_PATH
 
     data = {
         "home": cloud_path,
         "folder": to_folder_path,
         "token": api.csrf_token,
-        "conflict": "rename"
     }
+    if rename_on_conflict:
+        data.update({"conflict": "rename"})
 
     return api(url, "post", data=data)
 
