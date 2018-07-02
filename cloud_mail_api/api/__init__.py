@@ -1,88 +1,44 @@
 __all__ = ["API"]
 
+import os
+import json
+import importlib
+
 from requests.cookies import RequestsCookieJar
 
 from .. import constants
 from .. import errors
 
-from . import billing
-from . import file
-from . import folder
-from . import notify
-from . import single
-from . import tokens
-from . import trashbin
-from . import user
-
-
-class MethodsStore:
-    def __init__(self):
-        self.links = {
-            "tokens/csrf": tokens.tokens_csrf,
-            "tokens/download": tokens.tokens_download,
-            
-            "trashbin": trashbin.trashbin,
-            "trashbin/restore": trashbin.trashbin_restore,
-            "trashbin/empty": trashbin.trashbin_empty,
-            
-            "user": user.user,
-            "user/space": user.user_space,
-            
-            "billing/rates": billing.billing_rates,
-            
-            "zip": single.zip,
-            "dispatcher": single.dispatcher,
-            "notify/applink": notify.notify_applink,
-
-            "folder": folder.folder,
-            "folder/add": folder.folder_add,
-            "folder/move": file.file_move,
-            "folder/remove": file.file_remove,
-            "folder/rename": file.file_rename,
-            "folder/copy": file.file_copy,
-            "folder/publish": file.file_publish,
-            "folder/unpublish": file.file_unpublish,
-
-            "file": file.file,
-            "file/add": file.file_add,
-            "file/_upload_file": file.file_upload_file,
-            "file/move": file.file_move,
-            "file/remove": file.file_remove,
-            "file/rename": file.file_rename,
-            "file/copy": file.file_copy,
-            "file/publish": file.file_publish,
-            "file/unpublish": file.file_unpublish,
-            "file/history": file.file_history,
-        }
-
-    def get_method(self, url):
-        return self.links.get(url)
-
-
 class API:
-    def __init__(self, cloud_mail_instance):
+    def __init__(self, cloud_mail_instance, api_config_path=None):
         self.cloud_mail_instance = cloud_mail_instance
 
         self._csrf_token = None
 
         self.__is_url_cycle = False
         self.__url_parts = []
-        self.methods_store = MethodsStore()
 
-    def __getattr__(self, name):
-        if self.__is_url_cycle:
-            self.__url_parts.append(name)
-            return self
-        else:
-            if name not in dir(self):
-                self.__is_url_cycle = True
-            return getattr(self, name)
+        self.load_config(api_config_path or f"{os.path.dirname(__file__)}/api_config.json")
+
+    def __getattr__(self, name: str):
+        if (not self.__is_url_cycle) and (name in dir(self)):
+            return self.__getattribute__(name)
+
+        self.__is_url_cycle = True
+        self.__url_parts.append(name)
+        return self
 
     def __call__(self, *args, **kwargs) -> dict:
         if self.__is_url_cycle:
+            self.__is_url_cycle = False
             return self.url_resolver(*args, **kwargs)
         else:
             return self.raw_api_caller(*args, **kwargs)
+
+    def load_config(self, path: str) -> dict:
+        with open(path) as file:
+            self.config = json.loads(file.read())
+        return self.config
 
     @property
     def session(self) -> RequestsCookieJar:
@@ -109,27 +65,28 @@ class API:
         return response.status_code == 200
 
     def raw_api_caller(self, path: str, http_method: str, fullpath=False, **kwargs) -> dict:
-        if fullpath:
-            url = path
-        else:
-            url = "/".join([constants.API_BASE_ENDPOINT, path.strip(r"\/")])
+        url = path if fullpath else "/".join([constants.API_BASE_ENDPOINT, path.strip(r"\/")])
 
-        print(url)
         response = getattr(self.session, http_method.lower())(
             url, headers={"X-Requested-With": "XMLHttpRequest"}, **kwargs)
 
-        if "application/json" in response.headers["Content-Type"]:
-            return response.json()
-        else:
-            return response
+        return response.json() if "application/json" in response.headers["Content-Type"] else response
 
     def url_resolver(self, *args, **kwargs) -> dict:
         url = "/".join(self.__url_parts)
         self.__url_parts.clear()
-        self.__is_url_cycle = False
 
-        method = self.methods_store.get_method(url)
+        config = self.config["api_methods"].get(url)
+
+        method_module_ = config["location"]["module"]
+        method_package = config["location"]["package"]
+        method_function_name = config["location"]["function"]
+
+        method_module = importlib.import_module(method_module_, method_package)
+
+        method = getattr(method_module, method_function_name, None)
         if method is not None:
-            return method(self, *args, **kwargs)
+            method_result = method(self, *args, **kwargs)
+            return method_result
         else:
             raise NotImplementedError("No such method in implemented api")

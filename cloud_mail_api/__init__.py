@@ -11,7 +11,6 @@ from . import constants
 from . import errors
 
 
-
 class CloudMail:
     def __init__(self, login: str, password: str):
         self.login = login

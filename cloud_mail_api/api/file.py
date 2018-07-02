@@ -25,7 +25,6 @@ def file_upload_file(api, local_path: str) -> Tuple[str, int]:
     response = api.cloud_mail_instance.session.put(constants.API_FILE_UPLOAD_ENDPOINT, files=files)
     if response.status_code == 403:
         response = api.cloud_mail_instance.session.put(constants.API_FILE_UPLOAD_ENDPOINT, files=files)
-    print(response.request.headers["Content-Type"])
     return response.text, int(response.request.headers["Content-Length"])
 
 def _add(api, cloud_path: str, cloud_hash: str, file_size: int, rename_on_conflict=True) -> dict:
