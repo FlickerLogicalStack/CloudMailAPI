@@ -9,7 +9,7 @@ def trashbin(api, http_method, cloud_trashbin_path="/", limit=100) -> dict:
         "token": api.csrf_token,
     }
 
-    return api(url, http_method, params=data)
+    return api(url, http_method: str, params=data)
 
 def trashbin_restore(api, http_method, restore_revision: int, cloud_path: str) -> dict:
     url = constants.API_TRASHBIN_RESTORE_PATH
@@ -21,7 +21,7 @@ def trashbin_restore(api, http_method, restore_revision: int, cloud_path: str) -
         "conflict": "rename"
     }
 
-    return api(url, http_method, data=data)
+    return api(url, http_method: str, data=data)
 
 def trashbin_empty(api, http_method) -> dict:
     url = constants.API_TRASHBIN_EMPTY_PATH
@@ -30,4 +30,4 @@ def trashbin_empty(api, http_method) -> dict:
         "token": api.csrf_token
     }
 
-    return api(url, http_method, data=data)
+    return api(url, http_method: str, data=data)

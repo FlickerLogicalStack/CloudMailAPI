@@ -11,7 +11,7 @@ def folder(api, http_method, cloud_path: str, limit=100, offset=0, sort={"type":
         "sort": sort,
     }
 
-    return api(url, http_method, params=data)
+    return api(url, http_method: str, params=data)
 
 def folder_add(api, http_method, cloud_path: str) -> dict:
     url = constants.API_FOLDER_ADD_PATH
@@ -22,4 +22,4 @@ def folder_add(api, http_method, cloud_path: str) -> dict:
         "token": api.csrf_token
     }
 
-    return api(url, http_method, data=data)
+    return api(url, http_method: str, data=data)

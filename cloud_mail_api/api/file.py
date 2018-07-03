@@ -11,7 +11,7 @@ def file(api, http_method, cloud_path: str) -> dict:
         "token": api.csrf_token,
     }
 
-    return api(url, http_method, params=data)
+    return api(url, http_method: str, params=data)
 
 def file_upload_file(api, http_method, local_path: str) -> Tuple[str, int]:
     files = {
@@ -40,7 +40,7 @@ def _add(api, http_method, cloud_path: str, cloud_hash: str, file_size: int, ren
     if rename_on_conflict:
         data.update({"conflict": "rename"})
 
-    return api(url, http_method, data=data)
+    return api(url, http_method: str, data=data)
 
 def file_add(api, http_method, local_path: str, cloud_path: str) -> dict:
     cloud_hash, file_size = file_upload_file(api, http_method, local_path)
@@ -57,7 +57,7 @@ def file_remove(api, http_method, cloud_path: str) -> dict:
         "token": api.csrf_token,
     }
 
-    return api(url, http_method, data=data)
+    return api(url, http_method: str, data=data)
 
 def file_move(api, http_method, cloud_path: str, to_folder_path: str) -> dict:
     url = constants.API_FILE_MOVE_PATH
@@ -68,7 +68,7 @@ def file_move(api, http_method, cloud_path: str, to_folder_path: str) -> dict:
         "token": api.csrf_token
     }
 
-    return api(url, http_method, data=data)
+    return api(url, http_method: str, data=data)
 
 def file_rename(api, http_method, cloud_path: str, new_name: str, rename_on_conflict=True) -> dict:
     url = constants.API_FILE_RENAME_PATH
@@ -81,7 +81,7 @@ def file_rename(api, http_method, cloud_path: str, new_name: str, rename_on_conf
     if rename_on_conflict:
         data.update({"conflict": "rename"})
 
-    return api(url, http_method, data=data)
+    return api(url, http_method: str, data=data)
 
 def file_publish(api, http_method, cloud_path: str) -> dict:
     url = constants.API_FILE_PUBLISH_PATH
@@ -91,7 +91,7 @@ def file_publish(api, http_method, cloud_path: str) -> dict:
         "token": api.csrf_token
     }
 
-    return api(url, http_method, data=data)
+    return api(url, http_method: str, data=data)
 
 def file_unpublish(api, http_method, web_link: str) -> dict:
     url = constants.API_FILE_UNPUBLISH_PATH
@@ -101,7 +101,7 @@ def file_unpublish(api, http_method, web_link: str) -> dict:
         "token": api.csrf_token
     }
 
-    return api(url, http_method, data=data)
+    return api(url, http_method: str, data=data)
 
 def file_copy(api, http_method, cloud_path: str, to_folder_path: str, rename_on_conflict=True) -> dict:
     url = constants.API_FILE_COPY_PATH
@@ -114,7 +114,7 @@ def file_copy(api, http_method, cloud_path: str, to_folder_path: str, rename_on_
     if rename_on_conflict:
         data.update({"conflict": "rename"})
 
-    return api(url, http_method, data=data)
+    return api(url, http_method: str, data=data)
 
 def file_history(api, http_method, cloud_path: str) -> dict:
     url = constants.API_FILE_HISTORY_PATH
@@ -124,4 +124,4 @@ def file_history(api, http_method, cloud_path: str) -> dict:
         "token": api.csrf_token,
     }
 
-    return api(url, http_method, params=data)
+    return api(url, http_method: str, params=data)

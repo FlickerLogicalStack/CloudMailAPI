@@ -7,7 +7,7 @@ def user(api, http_method) -> dict:
         "token": api.csrf_token
     }
 
-    return api(url, http_method, params=data)
+    return api(url, http_method: str, params=data)
 
 def user_space(api, http_method) -> dict:
     url = constants.API_USER_SPACE_PATH
@@ -16,4 +16,4 @@ def user_space(api, http_method) -> dict:
         "token": api.csrf_token
     }
 
-    return api(url, http_method, params=data)
+    return api(url, http_method: str, params=data)

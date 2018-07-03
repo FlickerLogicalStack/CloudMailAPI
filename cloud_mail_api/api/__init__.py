@@ -58,7 +58,7 @@ class API:
             if response.get("body") == "user":
                 self.cloud_mail_instance.auth()
                 return self.csrf_token
-            
+
             if not isinstance(response["body"], dict):
                 raise errors.CloudMailUnexpectedTokenError(
                     f"Received wrong response format while obtaining token: 'body' must be dict, not {repr(response['body'])}")
@@ -90,12 +90,11 @@ class API:
 
             method = getattr(method_module, method_function_name, None)
             return method
-
         except:
             return None
 
     @memoize
-    def load_method_config(self, url):
+    def load_method_config(self, url: str) -> dict:
         return self.config["api_methods"].get(url)
 
     def raw_api_caller(self, path: str, http_method: str, fullpath=False, **kwargs) -> dict:
