@@ -2,7 +2,7 @@ from typing import Iterable
 
 from .. import constants
 
-def zip(api, cloud_paths: Iterable[str], name: str) -> dict:
+def zip(api, http_method, cloud_paths: Iterable[str], name: str) -> dict:
     url = constants.API_ZIP_PATH
 
     data = {
@@ -11,13 +11,13 @@ def zip(api, cloud_paths: Iterable[str], name: str) -> dict:
         "token": api.csrf_token
     }
 
-    return api(url, "post", data=data)
+    return api(url, http_method, data=data)
 
-def dispatcher(api) -> dict:
+def dispatcher(api, http_method) -> dict:
     url = constants.API_DISPATCHER_PATH
 
     data = {
         "token": api.csrf_token
     }
 
-    return api(url, "get", params=data)
+    return api(url, http_method, params=data)

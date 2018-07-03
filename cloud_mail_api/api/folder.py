@@ -1,6 +1,6 @@
 from .. import constants
 
-def folder(api, cloud_path: str, limit=100, offset=0, sort={"type":"name","order":"asc"}) -> dict:
+def folder(api, http_method, cloud_path: str, limit=100, offset=0, sort={"type":"name","order":"asc"}) -> dict:
     url = constants.API_FOLDER_PATH
 
     data = {
@@ -11,9 +11,9 @@ def folder(api, cloud_path: str, limit=100, offset=0, sort={"type":"name","order
         "sort": sort,
     }
 
-    return api(url, "get", params=data)
+    return api(url, http_method, params=data)
 
-def folder_add(api, cloud_path: str) -> dict:
+def folder_add(api, http_method, cloud_path: str) -> dict:
     url = constants.API_FOLDER_ADD_PATH
 
     data = {
@@ -22,4 +22,4 @@ def folder_add(api, cloud_path: str) -> dict:
         "token": api.csrf_token
     }
 
-    return api(url, "post", data=data)
+    return api(url, http_method, data=data)

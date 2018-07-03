@@ -1,5 +1,6 @@
 __all__ = ["API"]
 
+import functools
 import os
 import json
 import importlib
@@ -8,6 +9,16 @@ from requests.cookies import RequestsCookieJar
 
 from .. import constants
 from .. import errors
+
+def memoize(f):
+    cache = {}
+    functools.wraps(f)
+    def decorate(*args, **kwargs):
+        key = (tuple(args), hash(tuple(sorted(kwargs.items()))))
+        if key not in cache:
+            cache[key] = f(*args, **kwargs)
+        return cache[key]
+    return decorate
 
 class API:
     def __init__(self, cloud_mail_instance, api_config_path=None):
@@ -35,11 +46,6 @@ class API:
         else:
             return self.raw_api_caller(*args, **kwargs)
 
-    def load_config(self, path: str) -> dict:
-        with open(path) as file:
-            self.config = json.loads(file.read())
-        return self.config
-
     @property
     def session(self) -> RequestsCookieJar:
         return self.cloud_mail_instance.session
@@ -64,6 +70,34 @@ class API:
         response = self.cloud_mail_instance.session.get(constants.SDC_ENDPOINT)
         return response.status_code == 200
 
+    def load_config(self, path: str) -> dict:
+        with open(path) as file:
+            self.config = json.loads(file.read())
+        return self.config
+
+    @memoize
+    def load_function(self, url: str) -> dict:
+        try:
+            config = self.load_method_config(url)
+            if config is None:
+                raise NotImplementedError()
+
+            method_module_ = config["location"]["module"]
+            method_package = config["location"]["package"]
+            method_function_name = config["location"]["function"]
+
+            method_module = importlib.import_module(method_module_, method_package)
+
+            method = getattr(method_module, method_function_name, None)
+            return method
+
+        except:
+            return None
+
+    @memoize
+    def load_method_config(self, url):
+        return self.config["api_methods"].get(url)
+
     def raw_api_caller(self, path: str, http_method: str, fullpath=False, **kwargs) -> dict:
         url = path if fullpath else "/".join([constants.API_BASE_ENDPOINT, path.strip(r"\/")])
 
@@ -72,21 +106,15 @@ class API:
 
         return response.json() if "application/json" in response.headers["Content-Type"] else response
 
-    def url_resolver(self, *args, **kwargs) -> dict:
+    def url_resolver(self, *method_args, **method_kwargs) -> dict:
         url = "/".join(self.__url_parts)
         self.__url_parts.clear()
 
-        config = self.config["api_methods"].get(url)
+        method = self.load_function(url)
+        http_method = self.load_method_config(url).get("method")
 
-        method_module_ = config["location"]["module"]
-        method_package = config["location"]["package"]
-        method_function_name = config["location"]["function"]
-
-        method_module = importlib.import_module(method_module_, method_package)
-
-        method = getattr(method_module, method_function_name, None)
         if method is not None:
-            method_result = method(self, *args, **kwargs)
+            method_result = method(self, http_method, *method_args, **method_kwargs)
             return method_result
         else:
-            raise NotImplementedError("No such method in implemented api")
+            raise NotImplementedError("No such method with path '{url}' in implemented api")
