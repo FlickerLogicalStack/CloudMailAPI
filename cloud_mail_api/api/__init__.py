@@ -77,21 +77,18 @@ class API:
 
     @memoize
     def load_function(self, url: str) -> dict:
-        try:
-            config = self.load_method_config(url)
-            if config is None:
-                raise NotImplementedError()
+        config = self.load_method_config(url)
+        if config is None:
+            raise NotImplementedError()
 
-            method_module_ = config["location"]["module"]
-            method_package = config["location"]["package"]
-            method_function_name = config["location"]["function"]
+        method_module_ = config["location"]["module"]
+        method_package = config["location"]["package"]
+        method_function_name = config["location"]["function"]
 
-            method_module = importlib.import_module(method_module_, method_package)
+        method_module = importlib.import_module(method_module_, method_package)
 
-            method = getattr(method_module, method_function_name, None)
-            return method
-        except:
-            return None
+        method = getattr(method_module, method_function_name, None)
+        return method
 
     @memoize
     def load_method_config(self, url: str) -> dict:
@@ -116,4 +113,4 @@ class API:
             method_result = method(self, http_method, *method_args, **method_kwargs)
             return method_result
         else:
-            raise NotImplementedError("No such method with path '{url}' in implemented api")
+            raise NotImplementedError(f"No such method with path '{url}' in implemented api")

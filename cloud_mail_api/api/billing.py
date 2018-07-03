@@ -7,4 +7,4 @@ def billing_rates(api, http_method):
         "token": api.csrf_token,
     }
 
-    return api(url, http_method: str, params=data)
+    return api(url, http_method, params=data)

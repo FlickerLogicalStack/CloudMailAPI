@@ -4,7 +4,7 @@ from .. import errors
 def tokens_csrf(api, http_method, resolve_nosdc=False) -> dict:
     url = constants.API_TOKENS_CSRF_PATH
 
-    response = api(url, http_method: str)
+    response = api(url, http_method)
 
     if (response.get("status") == 403) and (response.get("body") == "nosdc") and (resolve_nosdc):
         sdc_response = api.sdc()
@@ -22,4 +22,4 @@ def tokens_download(api, http_method) -> dict:
         "token": api.tokens.csrf(True)["body"]["token"]
     }
 
-    return api(url, http_method: str, data=data)
+    return api(url, http_method, data=data)

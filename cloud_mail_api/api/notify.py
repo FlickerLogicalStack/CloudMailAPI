@@ -8,4 +8,4 @@ def notify_applink(api, http_method, phone_number: str) -> dict:
         "token": api.csrf_token
     }
 
-    return api(url, http_method: str, json=data)
+    return api(url, http_method, json=data)
