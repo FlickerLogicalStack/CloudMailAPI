@@ -247,11 +247,11 @@ In some methods (like file.add, folder.rename, etc), which may cause a conflict 
  'status': 200,
  'time': 1530450815567}
 ```
-- PyAPI: `>>> cm.api.file.unpublish(web_link: str)`
-  - `web_link`: web link of the file
+- PyAPI: `>>> cm.api.file.unpublish(weblink: str)`
+  - `weblink`: web link of the file
 - CloudAPI: `POST https://cloud.mail.ru/api/v2/file/unpublish`
   - Urlencoded Form Data:
-    - `weblink`: **as `web_link` in PyAPI**
+    - `weblink`: **as `weblink` in PyAPI**
     - `token`: `csrf` token, see method `tokens/csrf`
 
 #### *cloud.mail.ru/api/v2/file/copy* 

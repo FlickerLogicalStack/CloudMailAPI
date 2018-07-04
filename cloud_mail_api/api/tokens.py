@@ -1,11 +1,12 @@
-from .. import constants
 from .. import errors
 
-def tokens_csrf(api, http_method, resolve_nosdc=False) -> dict:
-    url = constants.API_TOKENS_CSRF_PATH
+def tokens_csrf(
+    api,
+    url,
+    http_method,
+    resolve_nosdc=False) -> dict:
 
     response = api(url, http_method)
-
     if (response.get("status") == 403) and (response.get("body") == "nosdc") and (resolve_nosdc):
         sdc_response = api.sdc()
         if sdc_response:
@@ -15,8 +16,10 @@ def tokens_csrf(api, http_method, resolve_nosdc=False) -> dict:
     else:
         return response
 
-def tokens_download(api, http_method) -> dict:
-    url = constants.API_TOKENS_DOWNLOAD_PATH
+def tokens_download(
+    api,
+    url,
+    http_method) -> dict:
 
     data = {
         "token": api.tokens.csrf(True)["body"]["token"]

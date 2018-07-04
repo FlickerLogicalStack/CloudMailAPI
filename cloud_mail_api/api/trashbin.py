@@ -1,7 +1,9 @@
-from .. import constants
-
-def trashbin(api, http_method, cloud_trashbin_path="/", limit=100) -> dict:
-    url = constants.API_TRASHBIN_PATH
+def trashbin(
+    api,
+    url,
+    http_method,
+    cloud_trashbin_path="/",
+    limit=100) -> dict:
 
     data = {
         "home": cloud_trashbin_path,
@@ -11,8 +13,12 @@ def trashbin(api, http_method, cloud_trashbin_path="/", limit=100) -> dict:
 
     return api(url, http_method, params=data)
 
-def trashbin_restore(api, http_method, restore_revision: int, cloud_path: str) -> dict:
-    url = constants.API_TRASHBIN_RESTORE_PATH
+def trashbin_restore(
+    api,
+    url,
+    http_method,
+    restore_revision: int,
+    cloud_path: str) -> dict:
 
     data = {
         "restore_revision": restore_revision,
@@ -23,8 +29,10 @@ def trashbin_restore(api, http_method, restore_revision: int, cloud_path: str) -
 
     return api(url, http_method, data=data)
 
-def trashbin_empty(api, http_method) -> dict:
-    url = constants.API_TRASHBIN_EMPTY_PATH
+def trashbin_empty(
+    api,
+    url,
+    http_method) -> dict:
 
     data = {
         "token": api.csrf_token

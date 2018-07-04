@@ -1,8 +1,4 @@
-from .. import constants
-
-def billing_rates(api, http_method):
-    url = constants.API_BILLING_RATES_PATH
-
+def billing_rates(api, url, http_method):
     data = {
         "token": api.csrf_token,
     }

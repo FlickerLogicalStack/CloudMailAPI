@@ -1,7 +1,8 @@
-from .. import constants
-
-def notify_applink(api, http_method, phone_number: str) -> dict:
-    url = constants.API_APPLINK_PATH
+def notify_applink(
+	api,
+	url,
+	http_method,
+	phone_number: str) -> dict:
 
     data = {
         "phone": phone_number,

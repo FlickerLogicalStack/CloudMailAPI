@@ -7,7 +7,6 @@ import importlib
 
 from requests.cookies import RequestsCookieJar
 
-from .. import constants
 from .. import errors
 
 def memoize(f):
@@ -25,6 +24,7 @@ class API:
         self.cloud_mail_instance = cloud_mail_instance
 
         self._csrf_token = None
+        self.config = None
 
         self.__is_url_cycle = False
         self.__url_parts = []
@@ -67,7 +67,7 @@ class API:
         return self._csrf_token
 
     def sdc(self) -> bool:
-        response = self.cloud_mail_instance.session.get(constants.SDC_ENDPOINT)
+        response = self.cloud_mail_instance.session.get(self.config["endpoints"]["SDC_ENDPOINT"])
         return response.status_code == 200
 
     def load_config(self, path: str) -> dict:
@@ -76,8 +76,8 @@ class API:
         return self.config
 
     @memoize
-    def load_function(self, url: str) -> dict:
-        config = self.load_method_config(url)
+    def load_function(self, path: str) -> dict:
+        config = self.load_method_config(path)
         if config is None:
             raise NotImplementedError()
 
@@ -91,11 +91,11 @@ class API:
         return method
 
     @memoize
-    def load_method_config(self, url: str) -> dict:
-        return self.config["api_methods"].get(url)
+    def load_method_config(self, path: str) -> dict:
+        return self.config["api_methods"].get(path)
 
-    def raw_api_caller(self, path: str, http_method: str, fullpath=False, **kwargs) -> dict:
-        url = path if fullpath else "/".join([constants.API_BASE_ENDPOINT, path.strip(r"\/")])
+    def raw_api_caller(self, path: str, http_method: str, fullpath=True, **kwargs) -> dict:
+        url = path if fullpath else "/".join([self.config["endpoints"]["API_BASE_ENDPOINT"], path.strip(r"\/")])
 
         response = getattr(self.session, http_method.lower())(
             url, headers={"X-Requested-With": "XMLHttpRequest"}, **kwargs)
@@ -103,14 +103,20 @@ class API:
         return response.json() if "application/json" in response.headers["Content-Type"] else response
 
     def url_resolver(self, *method_args, **method_kwargs) -> dict:
-        url = "/".join(self.__url_parts)
+        path = "/".join(self.__url_parts)
         self.__url_parts.clear()
 
-        method = self.load_function(url)
-        http_method = self.load_method_config(url).get("method")
+        method = self.load_function(path)
+        http_method = self.load_method_config(path).get("method")
+        endpoint = self.load_method_config(path).get(
+            "endpoint",
+            self.config["endpoints"]["API_BASE_ENDPOINT"]
+        )
+        path = path.strip(r"\/") if not self.load_method_config(path).get("no_path") else ""
+        url = "/".join([endpoint, path])
 
         if method is not None:
-            method_result = method(self, http_method, *method_args, **method_kwargs)
+            method_result = method(self, url, http_method, *method_args, **method_kwargs)
             return method_result
         else:
-            raise NotImplementedError(f"No such method with path '{url}' in implemented api")
+            raise NotImplementedError(f"No such method with path '{path}' in implemented api")

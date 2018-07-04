@@ -1,7 +1,11 @@
-from .. import constants
-
-def folder(api, http_method, cloud_path: str, limit=100, offset=0, sort={"type":"name","order":"asc"}) -> dict:
-    url = constants.API_FOLDER_PATH
+def folder(
+    api,
+    url,
+    http_method,
+    cloud_path: str,
+    limit=100,
+    offset=0,
+    sort={"type":"name","order":"asc"}) -> dict:
 
     data = {
         "home": cloud_path,
@@ -13,8 +17,11 @@ def folder(api, http_method, cloud_path: str, limit=100, offset=0, sort={"type":
 
     return api(url, http_method, params=data)
 
-def folder_add(api, http_method, cloud_path: str) -> dict:
-    url = constants.API_FOLDER_ADD_PATH
+def folder_add(
+    api,
+    url,
+    http_method,
+    cloud_path: str) -> dict:
 
     data = {
         "home": cloud_path,

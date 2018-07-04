@@ -1,9 +1,11 @@
 from typing import Iterable
 
-from .. import constants
-
-def zip(api, http_method, cloud_paths: Iterable[str], name: str) -> dict:
-    url = constants.API_ZIP_PATH
+def zip(
+    api,
+    url,
+    http_method,
+    cloud_paths: Iterable[str],
+    name: str) -> dict:
 
     data = {
         "home_list": str(cloud_paths).replace("'", '"'),
@@ -13,8 +15,10 @@ def zip(api, http_method, cloud_paths: Iterable[str], name: str) -> dict:
 
     return api(url, http_method, data=data)
 
-def dispatcher(api, http_method) -> dict:
-    url = constants.API_DISPATCHER_PATH
+def dispatcher(
+    api,
+    url,
+    http_method) -> dict:
 
     data = {
         "token": api.csrf_token

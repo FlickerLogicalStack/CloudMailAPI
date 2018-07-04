@@ -1,7 +1,7 @@
-from .. import constants
-
-def user(api, http_method) -> dict:
-    url = constants.API_USER_PATH
+def user(
+    api,
+    url,
+    http_method) -> dict:
 
     data = {
         "token": api.csrf_token
@@ -9,8 +9,10 @@ def user(api, http_method) -> dict:
 
     return api(url, http_method, params=data)
 
-def user_space(api, http_method) -> dict:
-    url = constants.API_USER_SPACE_PATH
+def user_space(
+    api,
+    url,
+    http_method) -> dict:
 
     data = {
         "token": api.csrf_token

@@ -1,10 +1,11 @@
 import os.path
 from typing import Tuple
 
-from .. import constants
-
-def file(api, http_method, cloud_path: str) -> dict:
-    url = constants.API_FILE_PATH
+def file(
+    api,
+    url,
+    http_method,
+    cloud_path: str) -> dict:
 
     data = {
         "home": cloud_path,
@@ -13,7 +14,12 @@ def file(api, http_method, cloud_path: str) -> dict:
 
     return api(url, http_method, params=data)
 
-def file_upload_file(api, http_method, local_path: str) -> Tuple[str, int]:
+def file_upload_file(
+    api,
+    url,
+    http_method,
+    local_path: str) -> Tuple[str, int]:
+
     files = {
         "file": (
             os.path.basename(local_path),
@@ -22,13 +28,19 @@ def file_upload_file(api, http_method, local_path: str) -> Tuple[str, int]:
         )
     }
 
-    response = api.cloud_mail_instance.session.put(constants.API_FILE_UPLOAD_ENDPOINT, files=files)
+    response = api.cloud_mail_instance.session.put(url, files=files)
     if response.status_code == 403:
-        response = api.cloud_mail_instance.session.put(constants.API_FILE_UPLOAD_ENDPOINT, files=files)
+        response = api.cloud_mail_instance.session.put(url, files=files)
     return response.text, int(response.request.headers["Content-Length"])
 
-def _add(api, http_method, cloud_path: str, cloud_hash: str, file_size: int, rename_on_conflict=True) -> dict:
-    url = constants.API_FILE_ADD_PATH
+def _add(
+    api,
+    url,
+    http_method,
+    cloud_path: str,
+    cloud_hash: str,
+    file_size: int,
+    rename_on_conflict=True) -> dict:
 
     data = {
         "home": cloud_path,
@@ -42,15 +54,24 @@ def _add(api, http_method, cloud_path: str, cloud_hash: str, file_size: int, ren
 
     return api(url, http_method, data=data)
 
-def file_add(api, http_method, local_path: str, cloud_path: str) -> dict:
-    cloud_hash, file_size = file_upload_file(api, http_method, local_path)
+def file_add(
+    api,
+    url,
+    http_method,
+    local_path: str,
+    cloud_path: str) -> dict:
+
+    cloud_hash, file_size = api.file._upload_file(local_path)
     if cloud_path.endswith("/"):
         cloud_path = os.path.join(cloud_path, os.path.basename(local_path))
 
-    return _add(api, http_method, cloud_path, cloud_hash, file_size)
+    return _add(api, url, http_method, cloud_path, cloud_hash, file_size)
 
-def file_remove(api, http_method, cloud_path: str) -> dict:
-    url = constants.API_FILE_REMOVE_PATH
+def file_remove(
+    api,
+    url,
+    http_method,
+    cloud_path: str) -> dict:
 
     data = {
         "home": cloud_path,
@@ -59,9 +80,13 @@ def file_remove(api, http_method, cloud_path: str) -> dict:
 
     return api(url, http_method, data=data)
 
-def file_move(api, http_method, cloud_path: str, to_folder_path: str) -> dict:
-    url = constants.API_FILE_MOVE_PATH
-
+def file_move(
+    api,
+    url,
+    http_method,
+    cloud_path:
+    str,
+    to_folder_path: str) -> dict:
     data = {
         "home": cloud_path,
         "folder": to_folder_path,
@@ -70,8 +95,13 @@ def file_move(api, http_method, cloud_path: str, to_folder_path: str) -> dict:
 
     return api(url, http_method, data=data)
 
-def file_rename(api, http_method, cloud_path: str, new_name: str, rename_on_conflict=True) -> dict:
-    url = constants.API_FILE_RENAME_PATH
+def file_rename(
+    api,
+    url,
+    http_method,
+    cloud_path: str,
+    new_name: str,
+    rename_on_conflict=True) -> dict:
 
     data = {
         "home": cloud_path,
@@ -83,8 +113,11 @@ def file_rename(api, http_method, cloud_path: str, new_name: str, rename_on_conf
 
     return api(url, http_method, data=data)
 
-def file_publish(api, http_method, cloud_path: str) -> dict:
-    url = constants.API_FILE_PUBLISH_PATH
+def file_publish(
+    api,
+    url,
+    http_method,
+    cloud_path: str) -> dict:
 
     data = {
         "home": cloud_path,
@@ -93,8 +126,11 @@ def file_publish(api, http_method, cloud_path: str) -> dict:
 
     return api(url, http_method, data=data)
 
-def file_unpublish(api, http_method, web_link: str) -> dict:
-    url = constants.API_FILE_UNPUBLISH_PATH
+def file_unpublish(
+    api,
+    url,
+    http_method,
+    weblink: str) -> dict:
 
     data = {
         "weblink": web_link,
@@ -103,8 +139,13 @@ def file_unpublish(api, http_method, web_link: str) -> dict:
 
     return api(url, http_method, data=data)
 
-def file_copy(api, http_method, cloud_path: str, to_folder_path: str, rename_on_conflict=True) -> dict:
-    url = constants.API_FILE_COPY_PATH
+def file_copy(
+    api,
+    url,
+    http_method,
+    cloud_path: str,
+    to_folder_path: str,
+    rename_on_conflict=True) -> dict:
 
     data = {
         "home": cloud_path,
@@ -116,8 +157,11 @@ def file_copy(api, http_method, cloud_path: str, to_folder_path: str, rename_on_
 
     return api(url, http_method, data=data)
 
-def file_history(api, http_method, cloud_path: str) -> dict:
-    url = constants.API_FILE_HISTORY_PATH
+def file_history(
+    api,
+    url,
+    http_method,
+    cloud_path: str) -> dict:
 
     data = {
         "home": cloud_path,

@@ -1,236 +1,244 @@
 {
-  "api_methods": {
-    "billing/rates": {
-        "method": "GET",
-        "location": {
-            "package": "cloud_mail_api.api",
-            "module": ".billing",
-            "function": "billing_rates"
-        }
+    "endpoints": {
+        "MAILRU_AUTH_ENDPOINT": "https://auth.mail.ru/cgi-bin/auth",
+        "SDC_ENDPOINT": "https://auth.mail.ru/sdc?from=https://cloud.mail.ru/home",
+        "TWO_FACTOR_AUTH_ENDPOINT": "https://auth.mail.ru/cgi-bin/secstep",
+        "API_BASE_ENDPOINT": "https://cloud.mail.ru/api/v2"
     },
-    "dispatcher": {
-        "method": "GET",
-        "location": {
-            "package": "cloud_mail_api.api",
-            "module": ".single",
-            "function": "dispatcher"
-        }
-    },
-    "file": {
-        "method": "GET",
-        "location": {
-            "package": "cloud_mail_api.api",
-            "module": ".file",
-            "function": "file"
-        }
-    },
-    "file/_upload_file": {
-        "method": "PUT",
-        "location": {
-            "package": "cloud_mail_api.api",
-            "module": ".file",
-            "function": "file_upload_file"
-        }
-    },
-    "file/add": {
-        "method": "POST",
-        "location": {
-            "package": "cloud_mail_api.api",
-            "module": ".file",
-            "function": "file_add"
-        }
-    },
-    "file/copy": {
-        "method": "POST",
-        "location": {
-            "package": "cloud_mail_api.api",
-            "module": ".file",
-            "function": "file_copy"
-        }
-    },
-    "file/history": {
-        "method": "GET",
-        "location": {
-            "package": "cloud_mail_api.api",
-            "module": ".file",
-            "function": "file_history"
-        }
-    },
-    "file/move": {
-        "method": "POST",
-        "location": {
-            "package": "cloud_mail_api.api",
-            "module": ".file",
-            "function": "file_move"
-        }
-    },
-    "file/remove": {
-        "method": "POST",
-        "location": {
-            "package": "cloud_mail_api.api",
-            "module": ".file",
-            "function": "file_remove"
-        }
-    },
-    "file/rename": {
-        "method": "POST",
-        "location": {
-            "package": "cloud_mail_api.api",
-            "module": ".file",
-            "function": "file_rename"
-        }
-    },
-    "file/publish": {
-        "method": "POST",
-        "location": {
-            "package": "cloud_mail_api.api",
-            "module": ".file",
-            "function": "file_publish"
-        }
-    },
-    "file/unpublish": {
-        "method": "POST",
-        "location": {
-            "package": "cloud_mail_api.api",
-            "module": ".file",
-            "function": "file_unpublish"
-        }
-    },
-    "folder": {
-        "method": "GET",
-        "location": {
-            "package": "cloud_mail_api.api",
-            "module": ".folder",
-            "function": "folder"
-        }
-    },
-    "folder/add": {
-        "method": "POST",
-        "location": {
-            "package": "cloud_mail_api.api",
-            "module": ".folder",
-            "function": "folder_add"
-        }
-    },
-    "folder/copy": {
-        "method": "POST",
-        "location": {
-            "package": "cloud_mail_api.api",
-            "module": ".file",
-            "function": "folder/copy"
-        }
-    },
-    "folder/move": {
-        "method": "POST",
-        "location": {
-            "package": "cloud_mail_api.api",
-            "module": ".file",
-            "function": "file_move"
-        }
-    },
-    "folder/remove": {
-        "method": "POST",
-        "location": {
-            "package": "cloud_mail_api.api",
-            "module": ".file",
-            "function": "file_remove"
-        }
-    },
-    "folder/rename": {
-        "method": "POST",
-        "location": {
-            "package": "cloud_mail_api.api",
-            "module": ".file",
-            "function": "file_rename"
-        }
-    },
-    "folder/publish": {
-        "method": "POST",
-        "location": {
-            "package": "cloud_mail_api.api",
-            "module": ".file",
-            "function": "file_publish"
-        }
-    },
-    "folder/unpublish": {
-        "method": "POST",
-        "location": {
-            "package": "cloud_mail_api.api",
-            "module": ".file",
-            "function": "file_unpublish"
-        }
-    },
-    "notify/applink": {
-        "method": "POST",
-        "location": {
-            "package": "cloud_mail_api.api",
-            "module": ".notify",
-            "function": "notify_applink"
-        }
-    },
-    "tokens/csrf": {
-        "method": "POST",
-        "location": {
-            "package": "cloud_mail_api.api",
-            "module": ".tokens",
-            "function": "tokens_csrf"
-        }
-    },
-    "tokens/download": {
-        "method": "POST",
-        "location": {
-            "package": "cloud_mail_api.api",
-            "module": ".tokens",
-            "function": "tokens_download"
-        }
-    },
-    "trashbin": {
-        "method": "GET",
-        "location": {
-            "package": "cloud_mail_api.api",
-            "module": ".trashbin",
-            "function": "trashbin"
-        }
-    },
-    "trashbin/empty": {
-        "method": "POST",
-        "location": {
-            "package": "cloud_mail_api.api",
-            "module": ".trashbin",
-            "function": "trashbin_empty"
-        }
-    },
-    "trashbin/restore": {
-        "method": "POST",
-        "location": {
-            "package": "cloud_mail_api.api",
-            "module": ".trashbin",
-            "function": "trashbin_restore"
-        }
-    },
-    "user": {
-        "method": "GET",
-        "location": {
-            "package": "cloud_mail_api.api",
-            "module": ".user",
-            "function": "user"
-        }
-    },
-    "user/space": {
-        "method": "GET",
-        "location": {
-            "package": "cloud_mail_api.api",
-            "module": ".user",
-            "function": "user_space"
-        }
-    },
-    "zip": {
-        "method": "POST",
-        "location": {
-            "package": "cloud_mail_api.api",
-            "module": ".single",
-            "function": "zip"
+    "api_methods": {
+        "billing/rates": {
+            "method": "GET",
+            "location": {
+                "package": "cloud_mail_api.api",
+                "module": ".billing",
+                "function": "billing_rates"
+            }
+        },
+        "dispatcher": {
+            "method": "GET",
+            "location": {
+                "package": "cloud_mail_api.api",
+                "module": ".single",
+                "function": "dispatcher"
+            }
+        },
+        "file": {
+            "method": "GET",
+            "location": {
+                "package": "cloud_mail_api.api",
+                "module": ".file",
+                "function": "file"
+            }
+        },
+        "file/_upload_file": {
+            "method": "PUT",
+            "endpoint": "https://cloclo21-upload.cloud.mail.ru/upload/",
+            "no_path": true,
+            "location": {
+                "package": "cloud_mail_api.api",
+                "module": ".file",
+                "function": "file_upload_file"
+            }
+        },
+        "file/add": {
+            "method": "POST",
+            "location": {
+                "package": "cloud_mail_api.api",
+                "module": ".file",
+                "function": "file_add"
+            }
+        },
+        "file/copy": {
+            "method": "POST",
+            "location": {
+                "package": "cloud_mail_api.api",
+                "module": ".file",
+                "function": "file_copy"
+            }
+        },
+        "file/history": {
+            "method": "GET",
+            "location": {
+                "package": "cloud_mail_api.api",
+                "module": ".file",
+                "function": "file_history"
+            }
+        },
+        "file/move": {
+            "method": "POST",
+            "location": {
+                "package": "cloud_mail_api.api",
+                "module": ".file",
+                "function": "file_move"
+            }
+        },
+        "file/remove": {
+            "method": "POST",
+            "location": {
+                "package": "cloud_mail_api.api",
+                "module": ".file",
+                "function": "file_remove"
+            }
+        },
+        "file/rename": {
+            "method": "POST",
+            "location": {
+                "package": "cloud_mail_api.api",
+                "module": ".file",
+                "function": "file_rename"
+            }
+        },
+        "file/publish": {
+            "method": "POST",
+            "location": {
+                "package": "cloud_mail_api.api",
+                "module": ".file",
+                "function": "file_publish"
+            }
+        },
+        "file/unpublish": {
+            "method": "POST",
+            "location": {
+                "package": "cloud_mail_api.api",
+                "module": ".file",
+                "function": "file_unpublish"
+            }
+        },
+        "folder": {
+            "method": "GET",
+            "location": {
+                "package": "cloud_mail_api.api",
+                "module": ".folder",
+                "function": "folder"
+            }
+        },
+        "folder/add": {
+            "method": "POST",
+            "location": {
+                "package": "cloud_mail_api.api",
+                "module": ".folder",
+                "function": "folder_add"
+            }
+        },
+        "folder/copy": {
+            "method": "POST",
+            "location": {
+                "package": "cloud_mail_api.api",
+                "module": ".file",
+                "function": "folder/copy"
+            }
+        },
+        "folder/move": {
+            "method": "POST",
+            "location": {
+                "package": "cloud_mail_api.api",
+                "module": ".file",
+                "function": "file_move"
+            }
+        },
+        "folder/remove": {
+            "method": "POST",
+            "location": {
+                "package": "cloud_mail_api.api",
+                "module": ".file",
+                "function": "file_remove"
+            }
+        },
+        "folder/rename": {
+            "method": "POST",
+            "location": {
+                "package": "cloud_mail_api.api",
+                "module": ".file",
+                "function": "file_rename"
+            }
+        },
+        "folder/publish": {
+            "method": "POST",
+            "location": {
+                "package": "cloud_mail_api.api",
+                "module": ".file",
+                "function": "file_publish"
+            }
+        },
+        "folder/unpublish": {
+            "method": "POST",
+            "location": {
+                "package": "cloud_mail_api.api",
+                "module": ".file",
+                "function": "file_unpublish"
+            }
+        },
+        "notify/applink": {
+            "method": "POST",
+            "location": {
+                "package": "cloud_mail_api.api",
+                "module": ".notify",
+                "function": "notify_applink"
+            }
+        },
+        "tokens/csrf": {
+            "method": "POST",
+            "location": {
+                "package": "cloud_mail_api.api",
+                "module": ".tokens",
+                "function": "tokens_csrf"
+            }
+        },
+        "tokens/download": {
+            "method": "POST",
+            "location": {
+                "package": "cloud_mail_api.api",
+                "module": ".tokens",
+                "function": "tokens_download"
+            }
+        },
+        "trashbin": {
+            "method": "GET",
+            "location": {
+                "package": "cloud_mail_api.api",
+                "module": ".trashbin",
+                "function": "trashbin"
+            }
+        },
+        "trashbin/empty": {
+            "method": "POST",
+            "location": {
+                "package": "cloud_mail_api.api",
+                "module": ".trashbin",
+                "function": "trashbin_empty"
+            }
+        },
+        "trashbin/restore": {
+            "method": "POST",
+            "location": {
+                "package": "cloud_mail_api.api",
+                "module": ".trashbin",
+                "function": "trashbin_restore"
+            }
+        },
+        "user": {
+            "method": "GET",
+            "location": {
+                "package": "cloud_mail_api.api",
+                "module": ".user",
+                "function": "user"
+            }
+        },
+        "user/space": {
+            "method": "GET",
+            "location": {
+                "package": "cloud_mail_api.api",
+                "module": ".user",
+                "function": "user_space"
+            }
+        },
+        "zip": {
+            "method": "POST",
+            "location": {
+                "package": "cloud_mail_api.api",
+                "module": ".single",
+                "function": "zip"
+            }
         }
     }
-  }
 }
