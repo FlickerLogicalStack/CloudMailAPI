@@ -47,10 +47,10 @@ Unofficial cloud.mail.ru's python API
 |       X      | (POST) | tokens/csrf           |                                       |
 |       X      | (POST) | tokens/download       |                                       |
 |              | (GET)  | weblinks              |                                       |
-|              | (GET)  | weblinks/subscribe    |                                       |
+|       0      | (GET)  | weblinks/subscribe    |         Server said me 'internal'     |
 |       X      | (GET)  | user                  |                                       |
-|              | (POST) | user/agree-la         |                                       |
-|              | (POST) | user/edit             |  Method just for redrawing frontend   |
+|       X      | (POST) | user/agree-la         |  Seper-Mega-Ultra-Alfa-Giga useless   |
+|       0      | (POST) | user/edit             |  Method just for redrawing frontend   |
 |              | (POST) | user/unfreeze         |                                       |
 |              | (POST) | user/promo/active     |                                       |
 |              | (POST) | user/promo/ignore     |                                       |
@@ -58,7 +58,7 @@ Unofficial cloud.mail.ru's python API
 |              | (POST) | user/promo/join       |                                       |
 |       X      | (GET)  | user/space            |                                       |
 |       X      | (POST) | zip                   |                                       |
-|              | (GET)  | mail/ab/contacts      |                                       |
+|       X      | (GET)  | mail/ab/contacts      |                                       |
 |              | (POST) | mail/ab/contacts/add  |                                       |
 |       X      | (GET)  | billing/rates         |                                       |
 |              | (POST) | billing/change        |                                       |
@@ -68,7 +68,7 @@ Unofficial cloud.mail.ru's python API
 |       X      | (GET)  | trashbin              |                                       |
 |       X      | (POST) | trashbin/restore      |                                       |
 |       X      | (POST) | trashbin/empty        |                                       |
-|              | (GET)  | domain/folders        |                                       |
+|       X      | (GET)  | domain/folders        |                                       |
 |              | (POST) | promo/validate        |                                       |
 |       X      | (POST) | notify/applink        |                                       |
 

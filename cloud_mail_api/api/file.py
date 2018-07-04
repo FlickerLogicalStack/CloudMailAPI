@@ -133,7 +133,7 @@ def file_unpublish(
     weblink: str) -> dict:
 
     data = {
-        "weblink": web_link,
+        "weblink": weblink,
         "token": api.csrf_token
     }
 

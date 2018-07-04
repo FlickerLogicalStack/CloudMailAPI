@@ -264,12 +264,36 @@
                 "function": "generic_get_only_token"
             }
         },
+        "user/agree-la": {
+            "method": "POST",
+            "location": {
+                "package": "cloud_mail_api.api",
+                "module": ".generic",
+                "function": "generic_post_only_token"
+            }
+        },
         "zip": {
             "method": "POST",
             "location": {
                 "package": "cloud_mail_api.api",
                 "module": ".single",
                 "function": "zip"
+            }
+        },
+        "domain/folders": {
+            "method": "GET",
+            "location": {
+                "package": "cloud_mail_api.api",
+                "module": ".generic",
+                "function": "generic_get_only_token"
+            }
+        },
+        "mail/ab/contacts": {
+            "method": "GET",
+            "location": {
+                "package": "cloud_mail_api.api",
+                "module": ".generic",
+                "function": "generic_get_only_token"
             }
         }
     }
