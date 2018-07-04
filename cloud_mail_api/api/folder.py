@@ -1,3 +1,5 @@
+from typing import Iterable
+
 def folder(
     api,
     url,
@@ -30,3 +32,33 @@ def folder_add(
     }
 
     return api(url, http_method, data=data)
+
+def folder_find(
+    api,
+    url,
+    http_method,
+    finding: str,
+    cloud_path: str,
+    limit=10000) -> dict:
+
+    data = {
+        "q": finding,
+        "path": cloud_path,
+        "limit": limit,
+        "token": api.csrf_token
+    }
+
+    return api(url, http_method, params=data)
+
+def folder_viruscan(
+    api,
+    url,
+    http_method,
+    hash_list: Iterable[str]) -> dict:
+
+    data = {
+        "hash_list": hash_list,
+        "token": api.csrf_token
+    }
+
+    return api(url, http_method, json=data)

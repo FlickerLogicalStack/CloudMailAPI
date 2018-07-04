@@ -28,8 +28,8 @@ Unofficial cloud.mail.ru's python API
 |       X      | (POST) | folder/copy           |`Alias for file/copy`                  |
 |       X      | (POST) | folder/publish        |`Alias for file/publish`               |
 |       X      | (POST) | folder/unpublish      |`Alias for file/unpublish`             |
-|              | (GET)  | folder/find           |                                       |
-|              | (GET)  | folder/invites        |                                       |
+|       X      | (GET)  | folder/find           |                                       |
+|       X      | (GET)  | folder/invites        |                                       |
 |              | (GET)  | folder/shared/links   |                                       |
 |              | (GET)  | folder/invites/info   |                                       |
 |              | (POST) | folder/invites/reject |                                       |
@@ -37,10 +37,10 @@ Unofficial cloud.mail.ru's python API
 |              | (GET)  | folder/shared/incomi  |                                       |
 |              | (GET)  | folder/shared/info    |                                       |
 |              | (POST) | folder/share          |                                       |
-|              | (GET)  | folder/tree           |                                       |
+|       X      | (GET)  | folder/tree           |                                       |
 |              | (POST) | folder/unmount        |                                       |
 |              | (POST) | folder/unshare        |                                       |
-|              | (POST) | folder/viruscan       |                                       |
+|       X      | (POST) | folder/viruscan       |                                       |
 |              | (GET)  | mail/ab/contacts      |                                       |
 |              | (POST) | mail/ab/contacts/add  |                                       |
 |              | (GET)  | status                |                                       |

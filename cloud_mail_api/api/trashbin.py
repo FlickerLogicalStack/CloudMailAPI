@@ -28,14 +28,3 @@ def trashbin_restore(
     }
 
     return api(url, http_method, data=data)
-
-def trashbin_empty(
-    api,
-    url,
-    http_method) -> dict:
-
-    data = {
-        "token": api.csrf_token
-    }
-
-    return api(url, http_method, data=data)

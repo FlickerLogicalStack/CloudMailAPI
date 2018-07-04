@@ -15,14 +15,3 @@ def tokens_csrf(
             raise errors.CloudMailSdcGettingError(f"Received unexpected status code: {sdc_response.status_code}")
     else:
         return response
-
-def tokens_download(
-    api,
-    url,
-    http_method) -> dict:
-
-    data = {
-        "token": api.tokens.csrf(True)["body"]["token"]
-    }
-
-    return api(url, http_method, data=data)

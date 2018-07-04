@@ -14,14 +14,3 @@ def zip(
     }
 
     return api(url, http_method, data=data)
-
-def dispatcher(
-    api,
-    url,
-    http_method) -> dict:
-
-    data = {
-        "token": api.csrf_token
-    }
-
-    return api(url, http_method, params=data)

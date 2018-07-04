@@ -10,16 +10,16 @@
             "method": "GET",
             "location": {
                 "package": "cloud_mail_api.api",
-                "module": ".billing",
-                "function": "billing_rates"
+                "module": ".generic",
+                "function": "generic_get_only_token"
             }
         },
         "dispatcher": {
             "method": "GET",
             "location": {
                 "package": "cloud_mail_api.api",
-                "module": ".single",
-                "function": "dispatcher"
+                "module": ".generic",
+                "function": "generic_get_only_token"
             }
         },
         "file": {
@@ -120,12 +120,44 @@
                 "function": "folder_add"
             }
         },
+        "folder/tree": {
+            "method": "POST",
+            "location": {
+                "package": "cloud_mail_api.api",
+                "module": ".folder",
+                "function": "folder"
+            }
+        },
+        "folder/find": {
+            "method": "GET",
+            "location": {
+                "package": "cloud_mail_api.api",
+                "module": ".folder",
+                "function": "folder_find"
+            }
+        },
+        "folder/viruscan": {
+            "method": "POST",
+            "location": {
+                "package": "cloud_mail_api.api",
+                "module": ".folder",
+                "function": "folder_viruscan"
+            }
+        },
+        "folder/invites": {
+            "method": "GET",
+            "location": {
+                "package": "cloud_mail_api.api",
+                "module": ".generic",
+                "function": "generic_get_only_token"
+            }
+        },
         "folder/copy": {
             "method": "POST",
             "location": {
                 "package": "cloud_mail_api.api",
                 "module": ".file",
-                "function": "folder/copy"
+                "function": "file_copy"
             }
         },
         "folder/move": {
@@ -188,8 +220,8 @@
             "method": "POST",
             "location": {
                 "package": "cloud_mail_api.api",
-                "module": ".tokens",
-                "function": "tokens_download"
+                "module": ".generic",
+                "function": "generic_post_only_token"
             }
         },
         "trashbin": {
@@ -204,8 +236,8 @@
             "method": "POST",
             "location": {
                 "package": "cloud_mail_api.api",
-                "module": ".trashbin",
-                "function": "trashbin_empty"
+                "module": ".generic",
+                "function": "generic_post_only_token"
             }
         },
         "trashbin/restore": {
@@ -220,16 +252,16 @@
             "method": "GET",
             "location": {
                 "package": "cloud_mail_api.api",
-                "module": ".user",
-                "function": "user"
+                "module": ".generic",
+                "function": "generic_get_only_token"
             }
         },
         "user/space": {
             "method": "GET",
             "location": {
                 "package": "cloud_mail_api.api",
-                "module": ".user",
-                "function": "user_space"
+                "module": ".generic",
+                "function": "generic_get_only_token"
             }
         },
         "zip": {
