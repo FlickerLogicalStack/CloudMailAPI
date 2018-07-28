@@ -3,8 +3,8 @@ from typing import Tuple
 
 def file(
     api,
-    url,
-    http_method,
+    url: str,
+    http_method: str,
     cloud_path: str) -> dict:
 
     data = {
@@ -16,8 +16,8 @@ def file(
 
 def file_upload_file(
     api,
-    url,
-    http_method,
+    url: str,
+    http_method: str,
     local_path: str) -> Tuple[str, int]:
 
     files = {
@@ -28,15 +28,15 @@ def file_upload_file(
         )
     }
 
-    response = api.cloud_mail_instance.session.put(url, files=files)
+    response = api.client_instance.session.put(url, files=files)
     if response.status_code == 403:
-        response = api.cloud_mail_instance.session.put(url, files=files)
+        response = api.client_instance.session.put(url, files=files)
     return response.text, int(response.request.headers["Content-Length"])
 
 def _add(
     api,
-    url,
-    http_method,
+    url: str,
+    http_method: str,
     cloud_path: str,
     cloud_hash: str,
     file_size: int,
@@ -56,8 +56,8 @@ def _add(
 
 def file_add(
     api,
-    url,
-    http_method,
+    url: str,
+    http_method: str,
     local_path: str,
     cloud_path: str) -> dict:
 
@@ -69,8 +69,8 @@ def file_add(
 
 def file_remove(
     api,
-    url,
-    http_method,
+    url: str,
+    http_method: str,
     cloud_path: str) -> dict:
 
     data = {
@@ -82,10 +82,9 @@ def file_remove(
 
 def file_move(
     api,
-    url,
-    http_method,
-    cloud_path:
-    str,
+    url: str,
+    http_method: str,
+    cloud_path: str,
     to_folder_path: str) -> dict:
     data = {
         "home": cloud_path,
@@ -97,8 +96,8 @@ def file_move(
 
 def file_rename(
     api,
-    url,
-    http_method,
+    url: str,
+    http_method: str,
     cloud_path: str,
     new_name: str,
     rename_on_conflict=True) -> dict:
@@ -115,8 +114,8 @@ def file_rename(
 
 def file_publish(
     api,
-    url,
-    http_method,
+    url: str,
+    http_method: str,
     cloud_path: str) -> dict:
 
     data = {
@@ -128,8 +127,8 @@ def file_publish(
 
 def file_unpublish(
     api,
-    url,
-    http_method,
+    url: str,
+    http_method: str,
     weblink: str) -> dict:
 
     data = {
@@ -141,8 +140,8 @@ def file_unpublish(
 
 def file_copy(
     api,
-    url,
-    http_method,
+    url: str,
+    http_method: str,
     cloud_path: str,
     to_folder_path: str,
     rename_on_conflict=True) -> dict:
@@ -159,8 +158,8 @@ def file_copy(
 
 def file_history(
     api,
-    url,
-    http_method,
+    url: str,
+    http_method: str,
     cloud_path: str) -> dict:
 
     data = {

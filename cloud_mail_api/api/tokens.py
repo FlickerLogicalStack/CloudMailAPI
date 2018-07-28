@@ -2,8 +2,8 @@ from .. import errors
 
 def tokens_csrf(
     api,
-    url,
-    http_method,
+    url: str,
+    http_method: str,
     resolve_nosdc=False) -> dict:
 
     response = api(url, http_method)

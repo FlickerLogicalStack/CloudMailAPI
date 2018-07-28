@@ -1,7 +1,7 @@
 def trashbin(
     api,
-    url,
-    http_method,
+    url: str,
+    http_method: str,
     cloud_trashbin_path="/",
     limit=100) -> dict:
 
@@ -15,8 +15,8 @@ def trashbin(
 
 def trashbin_restore(
     api,
-    url,
-    http_method,
+    url: str,
+    http_method: str,
     restore_revision: int,
     cloud_path: str) -> dict:
 

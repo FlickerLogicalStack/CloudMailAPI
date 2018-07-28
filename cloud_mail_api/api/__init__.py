@@ -20,8 +20,12 @@ def memoize(f):
     return decorate
 
 class API:
-    def __init__(self, cloud_mail_instance, api_config_path=None):
-        self.cloud_mail_instance = cloud_mail_instance
+    def __init__(self,
+        client_instance,
+        api_config_path=None,
+        preload_all_methods=True):
+
+        self.client_instance = client_instance
 
         self._csrf_token = None
         self.config = None
@@ -30,6 +34,8 @@ class API:
         self.__url_parts = []
 
         self.load_config(api_config_path or f"{os.path.dirname(__file__)}/api_config.json")
+        if preload_all_methods:
+            self.preload_all_methods()
 
     def __getattr__(self, name: str):
         if (not self.__is_url_cycle) and (name in dir(self)):
@@ -47,16 +53,12 @@ class API:
             return self.raw_api_caller(*args, **kwargs)
 
     @property
-    def session(self) -> RequestsCookieJar:
-        return self.cloud_mail_instance.session
-
-    @property
     def csrf_token(self) -> str:
         if self._csrf_token is None:
             response = self.tokens.csrf(True)
 
             if response.get("body") == "user":
-                self.cloud_mail_instance.auth()
+                self.client_instance.auth()
                 return self.csrf_token
 
             if not isinstance(response["body"], dict):
@@ -67,7 +69,7 @@ class API:
         return self._csrf_token
 
     def sdc(self) -> bool:
-        response = self.cloud_mail_instance.session.get(self.config["endpoints"]["SDC_ENDPOINT"])
+        response = self.client_instance.session.get(self.config["endpoints"]["SDC_ENDPOINT"])
         return response.status_code == 200
 
     def load_config(self, path: str) -> dict:
@@ -94,10 +96,25 @@ class API:
     def load_method_config(self, path: str) -> dict:
         return self.config["api_methods"].get(path)
 
-    def raw_api_caller(self, path: str, http_method: str, fullpath=True, **kwargs) -> dict:
+    def preload_all_methods(self) -> None:
+        try:
+            for path in self.config["api_methods"]:
+                self.load_method_config(path)
+                self.load_function(path)
+        except:
+            return False
+        else:
+            return True
+
+    def raw_api_caller(self,
+        path: str,
+        http_method: str,
+        fullpath=True,
+        **kwargs) -> dict:
+
         url = path if fullpath else "/".join([self.config["endpoints"]["API_BASE_ENDPOINT"], path.strip(r"\/")])
 
-        response = getattr(self.session, http_method.lower())(
+        response = getattr(self.client_instance.session, http_method.lower())(
             url, headers={"X-Requested-With": "XMLHttpRequest"}, **kwargs)
 
         return response.json() if "application/json" in response.headers["Content-Type"] else response

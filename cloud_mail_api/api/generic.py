@@ -1,7 +1,7 @@
 def generic_get_only_token(
     api,
-    url,
-    http_method) -> dict:
+    url: str,
+    http_method: str) -> dict:
 
     data = {
         "token": api.csrf_token
@@ -11,8 +11,8 @@ def generic_get_only_token(
 
 def generic_post_only_token(
     api,
-    url,
-    http_method) -> dict:
+    url: str,
+    http_method: str) -> dict:
 
     data = {
         "token": api.csrf_token

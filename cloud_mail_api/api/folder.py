@@ -2,8 +2,8 @@ from typing import Iterable
 
 def folder(
     api,
-    url,
-    http_method,
+    url: str,
+    http_method: str,
     cloud_path: str,
     limit=100,
     offset=0,
@@ -21,8 +21,8 @@ def folder(
 
 def folder_add(
     api,
-    url,
-    http_method,
+    url: str,
+    http_method: str,
     cloud_path: str) -> dict:
 
     data = {
@@ -35,8 +35,8 @@ def folder_add(
 
 def folder_find(
     api,
-    url,
-    http_method,
+    url: str,
+    http_method: str,
     finding: str,
     cloud_path: str,
     limit=10000) -> dict:
@@ -52,8 +52,8 @@ def folder_find(
 
 def folder_viruscan(
     api,
-    url,
-    http_method,
+    url: str,
+    http_method: str,
     hash_list: Iterable[str]) -> dict:
 
     data = {

@@ -2,8 +2,8 @@ from typing import Iterable
 
 def zip(
     api,
-    url,
-    http_method,
+    url: str,
+    http_method: str,
     cloud_paths: Iterable[str],
     name: str) -> dict:
 
