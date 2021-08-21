@@ -28,9 +28,17 @@ def file_upload_file(
         )
     }
 
-    response = api.client_instance.session.put(url, files=files)
+    # Not sure whether this params are required, however they are present on cloud.mail.ru website
+    params = {
+        "x-email": api.client_instance.login,
+        "cloud_domain": 2
+    }
+
+    response = api.client_instance.session.put(url, files=files, params=params)
+
     if response.status_code == 403:
-        response = api.client_instance.session.put(url, files=files)
+        response = api.client_instance.session.put(url, files=files, params=params)
+
     return response.text, int(response.request.headers["Content-Length"])
 
 def _add(

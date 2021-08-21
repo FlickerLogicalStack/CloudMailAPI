@@ -131,8 +131,8 @@ In some methods (like file.add, folder.rename, etc), which may cause a conflict 
     - `conflict`: see [About conflict](#about-conflict) section
     - `token`: `csrf` token, see method `tokens/csrf`
 
-#### *clocloXXX-upload.cloud.mail.ru/upload/*
-*where XXX in url is uploading server, can be obtain by calling `/dispatcher`*
+#### *cld-uploaderXXX.cloud.mail.ru/upload-web*
+*where XXX in url is uploading server, can be obtained by calling `/dispatcher`*
 - Method: `PUT`
 - Description: upload file to server
 - CloudAPI Response example:
@@ -142,7 +142,7 @@ In some methods (like file.add, folder.rename, etc), which may cause a conflict 
   - *where second element - size of the file*
 - PyAPI: `>>> cm.api.file.add(local_path: str, cloud_path: str)`
   - `local_path`: path to file in the local env
-- CloudAPI: `PUT clocloXXX-upload.cloud.mail.ru/upload/`
+- CloudAPI: `PUT cld-uploader12.cloud.mail.ru/upload-web`
   - multipart/form-data:
     - Just your file
   - api(...) call example:
