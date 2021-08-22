@@ -1,4 +1,5 @@
 import os.path
+import mimetypes
 from typing import Tuple
 
 def file(
@@ -19,14 +20,10 @@ def file_upload_file(
     url: str,
     http_method: str,
     local_path: str) -> Tuple[str, int]:
-
-    files = {
-        "file": (
-            os.path.basename(local_path),
-            open(local_path, "rb"),
-            "application/octet-stream"
-        )
-    }
+    with open(local_path, "rb") as fd:
+        data = fd.read()
+    
+    mime = mimetypes.guess_type(local_path)[0]
 
     # Not sure whether this params are required, however they are present on cloud.mail.ru website
     params = {
@@ -34,10 +31,7 @@ def file_upload_file(
         "cloud_domain": 2
     }
 
-    response = api.client_instance.session.put(url, files=files, params=params)
-
-    if response.status_code == 403:
-        response = api.client_instance.session.put(url, files=files, params=params)
+    response = api.client_instance.session.put(url, params=params, headers={"Content-Type": mime}, data=data)
 
     return response.text, int(response.request.headers["Content-Length"])
 
