@@ -32,7 +32,7 @@
         },
         "file/_upload_file": {
             "method": "PUT",
-            "endpoint": "https://cloclo21-upload.cloud.mail.ru/upload/",
+            "endpoint": "https://cld-uploader12.cloud.mail.ru/upload-web/",
             "no_path": true,
             "location": {
                 "package": "cloud_mail_api.api",

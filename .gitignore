@@ -107,3 +107,6 @@ tests.py
 *.sublime-workspace
 *.sublime-project
 *.backup
+
+# pycharm
+.idea

@@ -21,6 +21,19 @@ class CloudMail:
     def is_cookies_valid(self) -> bool:
         return self.api.tokens.csrf(True)["body"] != "user"
 
+    def load_csrf(self) -> bool:
+        """
+        Download csrf-token from mail.ru server and put it in session
+        """
+
+        resp = self.api.tokens.csrf(True)
+
+        if isinstance(resp["body"], dict):
+            self.session.headers["X-CSRF-Token"] = resp["body"]["token"]
+            return True
+
+        return False
+
     def auth(self) -> bool:
         response = self.session.post(
             self.api.config["endpoints"]["MAILRU_AUTH_ENDPOINT"],
@@ -40,6 +53,8 @@ class CloudMail:
                     "Permanent": "1"
                 }
             )
+
+        self.load_csrf()
 
         return self.is_cookies_valid()
 
